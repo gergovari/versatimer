@@ -4,31 +4,48 @@
 
 State state = SETUP;
 
-volatile unsigned long target = 0;
-signed long cur_mult = 1000;
-void addToTarget(signed int sign) {
-	signed long milli = sign * cur_mult;
-	if ((signed long) target + milli >= 0) {
-		target += milli;
-	}
-}
-unsigned long startMillis = 0;
-bool setStart = false;
-unsigned long idleStart = 0;
-bool isIdleStarted = false;
-signed long tickTimer() {
-	unsigned long currentMillis = millis();
-	if (isIdleStarted) {
-		target += currentMillis - idleStart;
-		isIdleStarted = false;
-	}
-	if (!setStart) {
-		startMillis = currentMillis;
-		setStart = true;
-	}
-	return target - (currentMillis - startMillis);
-}
+class TimerHandler {
+	volatile unsigned long target = 0;
+	unsigned long startMillis = 0;
+	bool setStart = false;
+	signed long curMult = 1000;
+	bool isIdleStarted = false;
+	unsigned long idleStart = 0;
 
+	public:
+		void advanceMult() {
+			curMult *= 60ul;
+		}
+		bool isSetupFinished() {
+			return curMult == (long) 1000 * 60 * 60;
+		}
+		void addToTarget(signed int sign) {
+			signed long milli = sign * curMult;
+			if ((signed long) target + milli >= 0) {
+				target += milli;
+			}
+		}
+		void tickIdle() {
+			if (isIdleStarted) {
+				idleStart = millis();
+			}
+		}
+		signed long tickTimer() {
+			unsigned long currentMillis = millis();
+			if (isIdleStarted) {
+				target += currentMillis - idleStart;
+				isIdleStarted = false;
+			}
+			if (!setStart) {
+				startMillis = currentMillis;
+				setStart = true;
+			}
+			return target - (currentMillis - startMillis);
+		}
+};
+
+BtnHandler btn = BtnHandler(&state);
+TimerHandler timer = TimerHandler();
 
 #define ALARM_PIN 3
 void setAlarmState(bool state) {
@@ -38,12 +55,7 @@ void setAlarmState(bool state) {
 void reset() {
 	setAlarmState(false);
 	state = SETUP;
-	target = 0;
-	cur_mult = 1000;
-	startMillis = 0;
-	setStart = false;
-	idleStart = 0;
-	isIdleStarted = false;
+	timer = TimerHandler();
 }
 
 void setPinModes() {
@@ -51,20 +63,19 @@ void setPinModes() {
 	setAlarmState(false);
 }
 
-BtnHandler btn = BtnHandler(&state);
 void setup() {
 	Serial.begin(9600);
 	setPinModes();
 	btn.setupBtns(
-		[](void*){addToTarget(-1);}, 
-		[](void*){addToTarget(1);},
+		[](void*){timer.addToTarget(-1);}, 
+		[](void*){timer.addToTarget(1);},
 		[](void *state){
 			switch (*((State*)state)) {
 				case SETUP: {
-					if (cur_mult == (long) 1000 * 60 * 60) {
+					if (timer.isSetupFinished()) {
 						*((State*)state) = RUNNING;
 					} else {
-						cur_mult *= 60ul;
+						timer.advanceMult();
 					}
 					break;
 				}
@@ -89,16 +100,14 @@ void loop() {
 	btn.tickBtns();
 	switch (state) {
 		case RUNNING: {
-			signed long passed = tickTimer();
+			signed long passed = timer.tickTimer();
 			if (passed <= 0) {
 				state = ALARM;
 			}
 			break;
 		}
 		case IDLE: {
-			if (!isIdleStarted) {
-				idleStart = millis();
-			}
+			timer.tickIdle();
 			break;
 		}
 		case ALARM: {
