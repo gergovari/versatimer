@@ -55,7 +55,34 @@ BtnHandler btn = BtnHandler(&state);
 void setup() {
 	Serial.begin(9600);
 	setPinModes();
-	btn.setupBtns();
+	btn.setupBtns(
+		[](void*){addToTarget(-1);}, 
+		[](void*){addToTarget(1);},
+		[](void *state){
+			switch (*((State*)state)) {
+				case SETUP: {
+					if (cur_mult == (long) 1000 * 60 * 60) {
+						*((State*)state) = RUNNING;
+					} else {
+						cur_mult *= 60ul;
+					}
+					break;
+				}
+				case RUNNING: {
+					*((State*)state) = IDLE;
+					break;
+				}
+				case IDLE: {
+					*((State*)state) = RUNNING;
+					break;
+				}
+				case ALARM: {
+					reset();
+					break;
+				}
+			}
+		}
+	);
 }
 
 void loop() {

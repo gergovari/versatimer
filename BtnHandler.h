@@ -18,7 +18,7 @@ class BtnHandler {
 	public:
 		BtnHandler(State *state_p);
 
-	void setupBtns();
+	void setupBtns(void (*)(void*), void (*)(void*), void (*)(void*));
 	void tickBtns();
 };
 
