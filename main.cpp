@@ -2,31 +2,21 @@
 #include "State.h"
 #include "BtnHandler.h"
 #include "TimerHandler.h"
+#include "AlarmHandler.h"
 
 State state = SETUP;
 
 BtnHandler btn = BtnHandler(&state);
 TimerHandler timer = TimerHandler();
-
-#define ALARM_PIN 3
-void setAlarmState(bool state) {
-	digitalWrite(ALARM_PIN, state);
-}
+AlarmHandler alarm = AlarmHandler();
 
 void reset() {
-	setAlarmState(false);
 	state = SETUP;
 	timer = TimerHandler();
+	alarm = AlarmHandler();
 }
 
-void setPinModes() {
-	pinMode(ALARM_PIN, OUTPUT);
-	setAlarmState(false);
-}
-
-void setup() {
-	Serial.begin(9600);
-	setPinModes();
+void setupBtns() {
 	btn.setupBtns(
 		[](void*){timer.addToTarget(-1);}, 
 		[](void*){timer.addToTarget(1);},
@@ -57,8 +47,13 @@ void setup() {
 	);
 }
 
-void loop() {
-	btn.tickBtns();
+
+void setup() {
+	Serial.begin(9600);
+	setupBtns();
+}
+
+void tickState() {
 	switch (state) {
 		case RUNNING: {
 			signed long passed = timer.tickTimer();
@@ -72,8 +67,12 @@ void loop() {
 			break;
 		}
 		case ALARM: {
-			setAlarmState(true);
+			alarm.setState(true);
 			break;
 		}
 	}
+}
+void loop() {
+	btn.tickBtns();
+	tickState();
 }
