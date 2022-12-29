@@ -1,48 +1,9 @@
 #include <Arduino.h>
-#include "BtnHandler.h"
 #include "State.h"
+#include "BtnHandler.h"
+#include "TimerHandler.h"
 
 State state = SETUP;
-
-class TimerHandler {
-	volatile unsigned long target = 0;
-	unsigned long startMillis = 0;
-	bool setStart = false;
-	signed long curMult = 1000;
-	bool isIdleStarted = false;
-	unsigned long idleStart = 0;
-
-	public:
-		void advanceMult() {
-			curMult *= 60ul;
-		}
-		bool isSetupFinished() {
-			return curMult == (long) 1000 * 60 * 60;
-		}
-		void addToTarget(signed int sign) {
-			signed long milli = sign * curMult;
-			if ((signed long) target + milli >= 0) {
-				target += milli;
-			}
-		}
-		void tickIdle() {
-			if (isIdleStarted) {
-				idleStart = millis();
-			}
-		}
-		signed long tickTimer() {
-			unsigned long currentMillis = millis();
-			if (isIdleStarted) {
-				target += currentMillis - idleStart;
-				isIdleStarted = false;
-			}
-			if (!setStart) {
-				startMillis = currentMillis;
-				setStart = true;
-			}
-			return target - (currentMillis - startMillis);
-		}
-};
 
 BtnHandler btn = BtnHandler(&state);
 TimerHandler timer = TimerHandler();
