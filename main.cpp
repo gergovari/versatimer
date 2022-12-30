@@ -10,6 +10,9 @@ class StateHandler {
 		TimerHandler timer;
 		AlarmHandler alarm;
 		State state = SETUP;
+		StateHandler() {
+			setupBtns();
+		}
 		void setupBtns() {
 			btn.setupBtns(
 				[](void *state){(*((StateHandler*)state)).timer.addToTarget(-1);}, 
@@ -17,6 +20,25 @@ class StateHandler {
 				[](void *state){(*((StateHandler*)state)).toggleState();},
 				this
 			);
+		}
+		void tickState() {
+			switch (state) {
+				case RUNNING: {
+					signed long passed = timer.tickTimer();
+					if (passed <= 0) {
+						state = ALARM;
+					}
+					break;
+				}
+				case IDLE: {
+					timer.tickIdle();
+					break;
+				}
+				case ALARM: {
+					alarm.setState(true);
+					break;
+				}
+			}
 		}
 		void toggleState() {
 			switch (state) {
@@ -48,29 +70,9 @@ StateHandler state;
 
 void setup() {
 	Serial.begin(9600);
-	state.setupBtns();
 }
 
-void tickState() {
-	switch (state.state) {
-		case RUNNING: {
-			signed long passed = state.timer.tickTimer();
-			if (passed <= 0) {
-				state.state = ALARM;
-			}
-			break;
-		}
-		case IDLE: {
-			state.timer.tickIdle();
-			break;
-		}
-		case ALARM: {
-			state.alarm.setState(true);
-			break;
-		}
-	}
-}
 void loop() {
 	state.btn.tickBtns();
-	tickState();
+	state.tickState();
 }
