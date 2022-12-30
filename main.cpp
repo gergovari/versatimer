@@ -5,12 +5,37 @@
 
 #include "State.h"
 class StateHandler {
+	BtnHandler btn;
+	TimerHandler timer;
+	AlarmHandler alarm;
+	State state;
+	void toggleState() {
+		switch (state) {
+			case SETUP: {
+				if (timer.isSetupFinished()) {
+					state = RUNNING;
+				} else {
+					timer.advanceMult();
+				}
+				break;
+			}
+			case RUNNING: {
+				state = IDLE;
+				break;
+			}
+			case IDLE: {
+				state = RUNNING;
+				break;
+			}
+			case ALARM: {
+				*this = StateHandler();
+				break;
+			}
+		}
+	}
 	public:
-		BtnHandler btn;
-		TimerHandler timer;
-		AlarmHandler alarm;
-		State state = SETUP;
 		StateHandler() {
+			state = SETUP;
 			setupBtns();
 		}
 		void setupBtns() {
@@ -37,30 +62,6 @@ class StateHandler {
 				}
 				case ALARM: {
 					alarm.setState(true);
-					break;
-				}
-			}
-		}
-		void toggleState() {
-			switch (state) {
-				case SETUP: {
-					if (timer.isSetupFinished()) {
-						state = RUNNING;
-					} else {
-						timer.advanceMult();
-					}
-					break;
-				}
-				case RUNNING: {
-					state = IDLE;
-					break;
-				}
-				case IDLE: {
-					state = RUNNING;
-					break;
-				}
-				case ALARM: {
-					*this = StateHandler();
 					break;
 				}
 			}
