@@ -10,52 +10,45 @@ class StateHandler {
 		TimerHandler timer;
 		AlarmHandler alarm;
 		State state = SETUP;
+		void setupBtns() {
+			btn.setupBtns(
+				[](void *state){(*((StateHandler*)state)).timer.addToTarget(-1);}, 
+				[](void *state){(*((StateHandler*)state)).timer.addToTarget(1);},
+				[](void *state){(*((StateHandler*)state)).toggleState();},
+				this
+			);
+		}
+		void toggleState() {
+			switch (state) {
+				case SETUP: {
+					if (timer.isSetupFinished()) {
+						state = RUNNING;
+					} else {
+						timer.advanceMult();
+					}
+					break;
+				}
+				case RUNNING: {
+					state = IDLE;
+					break;
+				}
+				case IDLE: {
+					state = RUNNING;
+					break;
+				}
+				case ALARM: {
+					*this = StateHandler();
+					break;
+				}
+			}
+		}
 };
 
 StateHandler state;
 
-void toggleState() {
-	switch (state.state) {
-		case SETUP: {
-			if (state.timer.isSetupFinished()) {
-				state.state = RUNNING;
-			} else {
-				state.timer.advanceMult();
-			}
-			break;
-		}
-		case RUNNING: {
-			state.state = IDLE;
-			break;
-		}
-		case IDLE: {
-			state.state = RUNNING;
-			break;
-		}
-		case ALARM: {
-			//reset();
-			break;
-		}
-	}
-}
-
-
-void reset() {
-	state = StateHandler();
-}
-
-void setupBtns() {
-	state.btn.setupBtns(
-		[](){state.timer.addToTarget(-1);}, 
-		[](){state.timer.addToTarget(1);},
-		[](){toggleState();}
-	);
-}
-
-
 void setup() {
 	Serial.begin(9600);
-	setupBtns();
+	state.setupBtns();
 }
 
 void tickState() {
