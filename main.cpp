@@ -22,6 +22,7 @@ class StateHandler {
 			);
 		}
 		void tickState() {
+			btn.tickBtns();
 			switch (state) {
 				case RUNNING: {
 					signed long passed = timer.tickTimer();
@@ -73,6 +74,5 @@ void setup() {
 }
 
 void loop() {
-	state.btn.tickBtns();
 	state.tickState();
 }
