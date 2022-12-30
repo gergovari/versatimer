@@ -1,41 +1,59 @@
 #include <Arduino.h>
-#include "State.h"
 #include "BtnHandler.h"
 #include "TimerHandler.h"
 #include "AlarmHandler.h"
 
-State state = SETUP;
+#include "State.h"
+class StateHandler {
+	//BtnHandler* btn;
+	//TimerHandler* timer;
+	public:
+		State state;
+		AlarmHandler* alarm;
+		//StateHandler(BtnHandler *btn_, TimerHandler *timer_, AlarmHandler *alarm_) {
+		//StateHandler(AlarmHandler *alarm_) {
+		StateHandler() {
+			state = SETUP;
+		}
+		
+};
 
-BtnHandler btn = BtnHandler(&state);
-TimerHandler timer = TimerHandler();
-AlarmHandler alarm = AlarmHandler();
+BtnHandler btn = BtnHandler();
+TimerHandler timer;
+//AlarmHandler alarm;
+//State state = SETUP;
+//StateHandler state = StateHandler(&btn, &timer, &alarm);
+//StateHandler state = StateHandler(&alarm);
+StateHandler state;
 
 void reset() {
-	state = SETUP;
 	timer = TimerHandler();
-	alarm = AlarmHandler();
+	//state = StateHandler(&btn, &timer, &alarm);
+	//state = StateHandler(&alarm);
+	state = StateHandler();
+	//state = SETUP;
 }
 
 void setupBtns() {
 	btn.setupBtns(
 		[](void*){timer.addToTarget(-1);}, 
 		[](void*){timer.addToTarget(1);},
-		[](void *state){
-			switch (*((State*)state)) {
+		[](void *state_){
+			switch (*((State*)state_)) {
 				case SETUP: {
 					if (timer.isSetupFinished()) {
-						*((State*)state) = RUNNING;
+						*((State*)state_) = RUNNING;
 					} else {
 						timer.advanceMult();
 					}
 					break;
 				}
 				case RUNNING: {
-					*((State*)state) = IDLE;
+					*((State*)state_) = IDLE;
 					break;
 				}
 				case IDLE: {
-					*((State*)state) = RUNNING;
+					*((State*)state_) = RUNNING;
 					break;
 				}
 				case ALARM: {
@@ -43,7 +61,8 @@ void setupBtns() {
 					break;
 				}
 			}
-		}
+		},
+		&state
 	);
 }
 
@@ -54,11 +73,11 @@ void setup() {
 }
 
 void tickState() {
-	switch (state) {
+	switch (state.state) {
 		case RUNNING: {
 			signed long passed = timer.tickTimer();
 			if (passed <= 0) {
-				state = ALARM;
+				state.state = ALARM;
 			}
 			break;
 		}
@@ -67,7 +86,7 @@ void tickState() {
 			break;
 		}
 		case ALARM: {
-			alarm.setState(true);
+			state.alarm -> setState(true);
 			break;
 		}
 	}

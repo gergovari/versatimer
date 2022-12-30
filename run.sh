@@ -1,1 +1,1 @@
-arduino-cli compile && arduino-cli upload -p /dev/ttyUSB0
+arduino-cli compile && arduino-cli upload -p /dev/ttyUSB1

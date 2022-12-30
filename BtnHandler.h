@@ -14,11 +14,10 @@ class BtnHandler {
 	OneButton okBtn;
 	OneButton *btns[3] {};
 
-	State *state;
 	public:
-		BtnHandler(State *state_p);
+		BtnHandler();
 
-	void setupBtns(void (*)(void*), void (*)(void*), void (*)(void*));
+	void setupBtns(void (*)(void*), void (*)(void*), void (*)(void*), void*);
 	void tickBtns();
 };
 
