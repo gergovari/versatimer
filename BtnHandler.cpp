@@ -5,13 +5,10 @@ BtnHandler::BtnHandler() : btns({ &leftBtn, &rightBtn, &okBtn }) {
 	rightBtn = OneButton(RIGHT_PIN, true, true);
 	okBtn = OneButton(OK_PIN, true, true);
 }	
-void BtnHandler::setupBtns(void (*left)(void*), void (*right)(void*), void (*ok)(void*), void *state) {
-	/*leftBtn.attachClick([](){addToTarget(-1);}, state);
-	rightBtn.attachClick([](){addToTarget(1);});
-	okBtn.attachClick(, state);*/
-	leftBtn.attachClick(left, state);
-	rightBtn.attachClick(right, state);
-	okBtn.attachClick(ok, state);
+void BtnHandler::setupBtns(void (*left), void (*right), void (*ok)) {
+	leftBtn.attachClick(left);
+	rightBtn.attachClick(right);
+	okBtn.attachClick(ok);
 }
 void BtnHandler::tickBtns() {
 	for (unsigned int i = 0; i < sizeof(btns)/sizeof(btns[0]); i++) {
