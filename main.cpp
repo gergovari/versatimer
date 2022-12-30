@@ -6,30 +6,30 @@
 #include "State.h"
 class StateHandler {
 	public:
-		State state;
-		StateHandler();
-		int toggleState(TimerHandler*);
+		BtnHandler btn;
+		TimerHandler timer;
+		AlarmHandler alarm;
+		State state = SETUP;
 };
 
-StateHandler::StateHandler() {
-	state = SETUP;
-}
-StateHandler::toggleState(TimerHandler *timer) {
-	switch (state) {
+StateHandler state;
+
+void toggleState() {
+	switch (state.state) {
 		case SETUP: {
-			if (timer -> isSetupFinished()) {
-				state = RUNNING;
+			if (state.timer.isSetupFinished()) {
+				state.state = RUNNING;
 			} else {
-				timer -> advanceMult();
+				state.timer.advanceMult();
 			}
 			break;
 		}
 		case RUNNING: {
-			state = IDLE;
+			state.state = IDLE;
 			break;
 		}
 		case IDLE: {
-			state = RUNNING;
+			state.state = RUNNING;
 			break;
 		}
 		case ALARM: {
@@ -39,22 +39,16 @@ StateHandler::toggleState(TimerHandler *timer) {
 	}
 }
 
-BtnHandler btn;
-TimerHandler timer;
-AlarmHandler alarm;
-StateHandler state;
 
 void reset() {
-	timer = TimerHandler();
-	alarm = AlarmHandler();
 	state = StateHandler();
 }
 
 void setupBtns() {
-	btn.setupBtns(
-		[](){timer.addToTarget(-1);}, 
-		[](){timer.addToTarget(1);},
-		[](){state.toggleState(&timer);}
+	state.btn.setupBtns(
+		[](){state.timer.addToTarget(-1);}, 
+		[](){state.timer.addToTarget(1);},
+		[](){toggleState();}
 	);
 }
 
@@ -67,23 +61,23 @@ void setup() {
 void tickState() {
 	switch (state.state) {
 		case RUNNING: {
-			signed long passed = timer.tickTimer();
+			signed long passed = state.timer.tickTimer();
 			if (passed <= 0) {
 				state.state = ALARM;
 			}
 			break;
 		}
 		case IDLE: {
-			timer.tickIdle();
+			state.timer.tickIdle();
 			break;
 		}
 		case ALARM: {
-			alarm.setState(true);
+			state.alarm.setState(true);
 			break;
 		}
 	}
 }
 void loop() {
-	btn.tickBtns();
+	state.btn.tickBtns();
 	tickState();
 }
