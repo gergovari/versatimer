@@ -1,1 +1,1 @@
-arduino-cli compile && arduino-cli upload -p /dev/ttyUSB${SERIAL}
+arduino-cli compile --warnings all && arduino-cli upload -p /dev/ttyUSB${SERIAL}

@@ -3,6 +3,12 @@
 
 #include <Arduino.h>
 
+enum MULT_STATE {
+	SEC,
+	MIN,
+	HOUR
+};
+
 class TimerHandler {
 	unsigned long startMillis;
 	bool setStart;
@@ -14,6 +20,7 @@ class TimerHandler {
 		signed long passed;
 
 		TimerHandler();
+		MULT_STATE getMultState();
 		void advanceMult();
 		bool isSetupFinished();
 		void addToTarget(signed int sign);

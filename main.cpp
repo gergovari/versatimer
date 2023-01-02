@@ -4,6 +4,8 @@
 #include "StateHandler.h"
 #include "State.h"
 
+#include "TimerHandler.h"
+
 StateHandler state;
 const int LCD_COLUMNS = 16;
 const int LCD_ROWS = 2;
@@ -22,9 +24,9 @@ void timeToText(long* time, char *out, bool blinkHour = false, bool blinkMin = f
 	long min = ((*time - (hour * 1000 * 60 * 60)) / 1000 / 60);
 	long sec = ((*time - (hour * 1000 * 60 * 60) - (min * 1000 * 60)) / 1000);
 	
-	const int HOUR_FORMAT_SIZE = 6;
-	const int MIN_FORMAT_SIZE = 6;
-	const int SEC_FORMAT_SIZE = 6;
+	const int HOUR_FORMAT_SIZE = 8;
+	const int MIN_FORMAT_SIZE = 8;
+	const int SEC_FORMAT_SIZE = 8;
 	char hourFormat[HOUR_FORMAT_SIZE] = " ";
 	char minFormat[MIN_FORMAT_SIZE] = "  ";
 	char secFormat[SEC_FORMAT_SIZE] = "  ";
@@ -38,7 +40,7 @@ void timeToText(long* time, char *out, bool blinkHour = false, bool blinkMin = f
 		strncpy(secFormat, "%02lu", SEC_FORMAT_SIZE);
 	}
 	
-	const int FORMAT_SIZE = 21;
+	const int FORMAT_SIZE = 27;
 	char format[FORMAT_SIZE];
 	snprintf(format, FORMAT_SIZE, "%s:%s:%s", hourFormat, minFormat, secFormat);
 
@@ -47,25 +49,30 @@ void timeToText(long* time, char *out, bool blinkHour = false, bool blinkMin = f
 	strncpy(out, text, LCD_COLUMNS + 1);
 }
 
-bool ifVisibleChange(long *a, long *b) {
+unsigned long lastBlink = 0;
+const int BLINK_DELAY = 2 * 1000;
+bool isBlinkNeeded() {
+	return millis() - lastBlink >= BLINK_DELAY;
+}
+
+bool ifVisibleChange(long *a, long *b, bool blink = false) {
 	char outA[LCD_COLUMNS + 1];
 	timeToText(a, outA);
 	char outB[LCD_COLUMNS + 1];
 	timeToText(b, outB);
-	return strcmp(outA, outB);
+	return strcmp(outA, outB) || (blink && isBlinkNeeded());
 }
 
-unsigned long lastBlink = 0;
-const int BLINK_DELAY = 2 * 1000;
+bool wasBlink = true;
 void printTime(long *time, bool blinkHour = false, bool blinkMin = false, bool blinkSec = false) {
 	char text[LCD_COLUMNS + 1];
 	
-	unsigned long present = millis();
 	bool blink = false;
 	if (blinkHour || blinkMin || blinkSec) {
-		if (present - lastBlink >= BLINK_DELAY) {
-			blink = true;
-			lastBlink = present;
+		if (isBlinkNeeded()) {
+			blink = !wasBlink;
+			wasBlink = !wasBlink;
+			lastBlink = millis();
 		}
 	}
 	timeToText(time, text, blinkHour && blink, blinkMin && blink, blinkSec && blink);
@@ -78,11 +85,17 @@ unsigned long lastPassed = 1000;
 bool alarmPrinted = false;
 void loop() {
 	state.tickState();
+
+	MULT_STATE multState = state.timer.getMultState();
+	bool hour = multState == HOUR;
+	bool min = multState == MIN;
+	bool sec = multState == SEC;
+
 	switch (state.state) {
 		case SETUP: {
-			if (ifVisibleChange(&lastTarget, &(state.timer.target))) {
+			if (ifVisibleChange(&lastTarget, &(state.timer.target), true)) {
 				lcd.clear();
-				printTime(&(state.timer.target));
+				printTime(&(state.timer.target), hour, min, sec);
 				lastTarget = state.timer.target;
 			}
 			break;
@@ -90,7 +103,7 @@ void loop() {
 		case RUNNING: {
 			if (ifVisibleChange(&lastPassed, &(state.timer.passed)) || ifVisibleChange(&lastTarget, &(state.timer.target))) {
 				lcd.clear();
-				printTime(&(state.timer.passed), true, true, true);
+				printTime(&(state.timer.passed));
 				lcd.print(F("/"));
 				printTime(&(state.timer.target));
 				lastPassed = state.timer.passed;

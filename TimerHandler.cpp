@@ -10,6 +10,16 @@ TimerHandler::TimerHandler() {
 	idleStart = 0;
 }
 
+MULT_STATE TimerHandler::getMultState() {
+	MULT_STATE state = SEC;
+	if (curMult == 1000 * 60) {
+		state = MIN;
+	} else {
+		state = HOUR;
+	}
+	return state;
+}
+
 void TimerHandler::advanceMult() {
 	curMult *= 60ul;
 }
