@@ -161,5 +161,13 @@ void loop() {
 			}
 			break;
 		}
+		case ALARM: {
+			if (ifVisibleChange(0, 0, true)) {
+				lcd.clear();
+				printTime(&(state.timer.passed), true, true, true);
+				lcd.print(F("/"));
+				printTime(&(state.timer.target));
+			}
+		}
 	}
 }
