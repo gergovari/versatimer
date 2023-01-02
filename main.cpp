@@ -40,17 +40,67 @@ void timeToText(long* time, char *out, bool blinkHour = false, bool blinkMin = f
 		strncpy(secFormat, "%02lu", SEC_FORMAT_SIZE);
 	}
 	
-	const int FORMAT_SIZE = 27;
+
+	const int FORMAT_SIZE = 25;
 	char format[FORMAT_SIZE];
 	snprintf(format, FORMAT_SIZE, "%s:%s:%s", hourFormat, minFormat, secFormat);
-
+	
+	// TODO: refactor
+	// NOTE: WHERE IS %x$ ON AVR???? anyway... ugly ifs ahead
+	// if you know a better solution, or know how to get indexing to work here... make a PR please
 	char text[LCD_COLUMNS + 1];
-	snprintf(text, LCD_COLUMNS + 1, format, hour, min, sec);
+	if (blinkHour) {
+		if (blinkMin) {
+			if (blinkSec) {
+				snprintf(text, LCD_COLUMNS + 1, format);
+			} else {
+				snprintf(text, LCD_COLUMNS + 1, format, sec);
+			}
+		} else {
+			if (blinkSec) {
+				snprintf(text, LCD_COLUMNS + 1, format, min);
+			} else {
+				snprintf(text, LCD_COLUMNS + 1, format, min, sec);
+			}
+		}
+	} else if (blinkMin) {
+		if (blinkHour) {
+			if (blinkSec) {
+				snprintf(text, LCD_COLUMNS + 1, format);
+			} else {
+				snprintf(text, LCD_COLUMNS + 1, format, sec);
+			}
+		} else {
+			if (blinkSec) {
+				snprintf(text, LCD_COLUMNS + 1, format, hour);
+			} else {
+				snprintf(text, LCD_COLUMNS + 1, format, hour, sec);
+			}
+		}
+	} else if (blinkSec) {
+		if (blinkHour) {
+			if (blinkMin) {
+				snprintf(text, LCD_COLUMNS + 1, format);
+			} else {
+				snprintf(text, LCD_COLUMNS + 1, format, min);
+			}
+		} else {
+			if (blinkMin) {
+				snprintf(text, LCD_COLUMNS + 1, format, hour);
+			} else {
+				snprintf(text, LCD_COLUMNS + 1, format, hour, min);
+			}
+		}
+	} else {
+		snprintf(text, LCD_COLUMNS + 1, format, hour, min, sec);
+	}
+	// forgive me...
+
 	strncpy(out, text, LCD_COLUMNS + 1);
 }
 
 unsigned long lastBlink = 0;
-const int BLINK_DELAY = 2 * 1000;
+const int BLINK_DELAY = 500;
 bool isBlinkNeeded() {
 	return millis() - lastBlink >= BLINK_DELAY;
 }
