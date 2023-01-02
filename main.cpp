@@ -11,44 +11,63 @@ const int LCD_COLUMNS = 16;
 const int LCD_ROWS = 2;
 LCD_I2C lcd(0x27, LCD_COLUMNS, LCD_ROWS);
 
-void setup() {
-	Serial.begin(9600);
-	lcd.begin();
-	lcd.backlight();
-	//lcd.noBacklight();
-	lcd.setCursor(0, 0);
+// NOTE: would not doing unnecessary calculations improve perf?
+unsigned long timeToHour(unsigned long* time) {
+	return *time / 1000 / 60 / 60;
+}
+unsigned long timeToMin(unsigned long* time) {
+	return (*time - (timeToHour(time) * 1000 * 60 * 60)) / 1000 / 60;
+}
+unsigned long timeToSec(unsigned long* time) {
+	return (*time - (timeToHour(time) * 1000 * 60 * 60) - (timeToMin(time) * 1000 * 60)) / 1000;
+}
+
+const int HOUR_FORMAT_SIZE = 5 + 1;
+const int MIN_FORMAT_SIZE = 5 + 1;
+const int SEC_FORMAT_SIZE = 5 + 1;
+const int FORMAT_SIZE = HOUR_FORMAT_SIZE + MIN_FORMAT_SIZE + SEC_FORMAT_SIZE + 2 + 1;
+char* getFormat(bool blink, int width, int size, char* out) {
+	if (blink) {
+		memset(out, '\0', width + 1);
+		memset(out, ' ', width);
+	} else {
+		char format[size];
+		snprintf(format, size, "%%0%dlu", width);
+		strncpy(out, format, size);
+	}
+	return out;
+}
+char* getHourFormat(bool blink, char* out) {
+	return getFormat(blink, 1, HOUR_FORMAT_SIZE, out);
+}
+char* getMinFormat(bool blink, char* out) {
+	return getFormat(blink, 2, MIN_FORMAT_SIZE, out);
+}
+char* getSecFormat(bool blink, char* out) {
+	return getFormat(blink, 2, SEC_FORMAT_SIZE, out);
 }
 
 void timeToText(unsigned long* time, char *out, bool blinkHour = false, bool blinkMin = false, bool blinkSec = false) {
-	long hour = (*time / 1000 / 60 / 60);
-	long min = ((*time - (hour * 1000 * 60 * 60)) / 1000 / 60);
-	long sec = ((*time - (hour * 1000 * 60 * 60) - (min * 1000 * 60)) / 1000);
-	
-	const int HOUR_FORMAT_SIZE = 8;
-	const int MIN_FORMAT_SIZE = 8;
-	const int SEC_FORMAT_SIZE = 8;
-	char hourFormat[HOUR_FORMAT_SIZE] = " ";
-	char minFormat[MIN_FORMAT_SIZE] = "  ";
-	char secFormat[SEC_FORMAT_SIZE] = "  ";
-	if (!blinkHour) {
-		strncpy(hourFormat, "%01lu", HOUR_FORMAT_SIZE);
-	}	
-	if (!blinkMin) {
-		strncpy(minFormat, "%02lu", MIN_FORMAT_SIZE);
-	}	
-	if (!blinkSec) {
-		strncpy(secFormat, "%02lu", SEC_FORMAT_SIZE);
-	}
-	
-
-	const int FORMAT_SIZE = 25;
 	char format[FORMAT_SIZE];
-	snprintf(format, FORMAT_SIZE, "%s:%s:%s", hourFormat, minFormat, secFormat);
+	char hourOut[HOUR_FORMAT_SIZE];
+	char minOut[MIN_FORMAT_SIZE];
+	char secOut[SEC_FORMAT_SIZE];
+	snprintf(
+		format, 
+		FORMAT_SIZE, 
+		"%s:%s:%s", 
+		getHourFormat(blinkHour, hourOut),
+		getMinFormat(blinkMin, minOut), 
+		getSecFormat(blinkSec, secOut)
+	);
 	
 	// TODO: refactor
 	// NOTE: WHERE IS %x$ ON AVR???? anyway... ugly ifs ahead
 	// if you know a better solution, or know how to get indexing to work here... make a PR please
 	char text[LCD_COLUMNS + 1];
+	unsigned long hour = timeToHour(time);
+	unsigned long min = timeToMin(time);
+	unsigned long sec = timeToSec(time);
 	if (blinkHour) {
 		if (blinkMin) {
 			if (blinkSec) {
@@ -170,6 +189,14 @@ void tickUI() {
 			break;	 
 		}
 	}
+}
+
+void setup() {
+	Serial.begin(9600);
+	lcd.begin();
+	lcd.backlight();
+	//lcd.noBacklight();
+	lcd.setCursor(0, 0);
 }
 
 void loop() {
