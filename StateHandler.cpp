@@ -32,6 +32,9 @@ void StateHandler::tickState() {
 			alarm.setState(true);
 			break;
 		}
+		default: {
+			break;	 
+		}
 	}
 }
 

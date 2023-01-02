@@ -19,7 +19,7 @@ void setup() {
 	lcd.setCursor(0, 0);
 }
 
-void timeToText(long* time, char *out, bool blinkHour = false, bool blinkMin = false, bool blinkSec = false) {
+void timeToText(unsigned long* time, char *out, bool blinkHour = false, bool blinkMin = false, bool blinkSec = false) {
 	long hour = (*time / 1000 / 60 / 60);
 	long min = ((*time - (hour * 1000 * 60 * 60)) / 1000 / 60);
 	long sec = ((*time - (hour * 1000 * 60 * 60) - (min * 1000 * 60)) / 1000);
@@ -105,7 +105,7 @@ bool isBlinkNeeded() {
 	return millis() - lastBlink >= BLINK_DELAY;
 }
 
-bool ifVisibleChange(long *a, long *b, bool blink = false) {
+bool ifVisibleChange(unsigned long *a, unsigned long *b, bool blink = false) {
 	char outA[LCD_COLUMNS + 1];
 	timeToText(a, outA);
 	char outB[LCD_COLUMNS + 1];
@@ -114,7 +114,7 @@ bool ifVisibleChange(long *a, long *b, bool blink = false) {
 }
 
 bool wasBlink = true;
-void printTime(long *time, bool blinkHour = false, bool blinkMin = false, bool blinkSec = false) {
+void printTime(unsigned long *time, bool blinkHour = false, bool blinkMin = false, bool blinkSec = false) {
 	char text[LCD_COLUMNS + 1];
 	
 	bool blink = false;
@@ -165,6 +165,9 @@ void tickUI() {
 				lcd.print(F("/"));
 				printTime(&(state.timer.target));
 			}
+		}
+		default: {
+			break;	 
 		}
 	}
 }

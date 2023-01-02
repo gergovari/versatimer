@@ -16,8 +16,8 @@ class TimerHandler {
 	bool isIdleStarted;
 	unsigned long idleStart;
 	public:
-		volatile unsigned long target;
-		signed long passed;
+		unsigned long target;
+		unsigned long passed;
 
 		TimerHandler();
 		MULT_STATE getMultState();
