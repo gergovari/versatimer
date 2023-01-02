@@ -18,8 +18,8 @@ void StateHandler::tickState() {
 	btn.tickBtns();
 	switch (state) {
 		case RUNNING: {
-			signed long passed = timer.tickTimer();
-			if (passed <= 0) {
+			timer.tickTimer();
+			if (timer.passed <= 0) {
 				state = ALARM;
 			}
 			break;

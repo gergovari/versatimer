@@ -2,6 +2,7 @@
 
 TimerHandler::TimerHandler() {
 	target = 0;
+	passed = 0;
 	startMillis = 0;
 	setStart = false;
 	curMult = 1000;
@@ -30,7 +31,7 @@ void TimerHandler::tickIdle() {
 	}
 }
 
-signed long TimerHandler::tickTimer() {
+void TimerHandler::tickTimer() {
 	unsigned long currentMillis = millis();
 	if (isIdleStarted) {
 		target += currentMillis - idleStart;
@@ -40,5 +41,5 @@ signed long TimerHandler::tickTimer() {
 		startMillis = currentMillis;
 		setStart = true;
 	}
-	return target - (currentMillis - startMillis);
+	passed = target - (currentMillis - startMillis);
 }

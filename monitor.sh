@@ -1,1 +1,1 @@
-arduino-cli monitor -p /dev/ttyUSB1
+arduino-cli monitor -p /dev/ttyUSB${SERIAL}

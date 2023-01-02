@@ -8,14 +8,14 @@
 
 class StateHandler {
 	BtnHandler btn;
-	TimerHandler timer;
 	AlarmHandler alarm;
-	State state;
 
 	void setupBtns();
 	void toggleState();
 
 	public:
+		State state;
+		TimerHandler timer;
 		StateHandler();
 		void tickState();
 };
