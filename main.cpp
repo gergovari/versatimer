@@ -132,10 +132,7 @@ void printTime(long *time, bool blinkHour = false, bool blinkMin = false, bool b
 
 unsigned long lastTarget = 1000;
 unsigned long lastPassed = 1000;
-bool alarmPrinted = false;
-void loop() {
-	state.tickState();
-
+void tickUI() {
 	MULT_STATE multState = state.timer.getMultState();
 	bool hour = multState == HOUR;
 	bool min = multState == MIN;
@@ -170,4 +167,9 @@ void loop() {
 			}
 		}
 	}
+}
+
+void loop() {
+	state.tickState();
+	tickUI();
 }
