@@ -25,9 +25,9 @@ void timeToText(long* time, char *out, bool blinkHour = false, bool blinkMin = f
 	const int HOUR_FORMAT_SIZE = 6;
 	const int MIN_FORMAT_SIZE = 6;
 	const int SEC_FORMAT_SIZE = 6;
-	char hourFormat[HOUR_FORMAT_SIZE];
-	char minFormat[MIN_FORMAT_SIZE];
-	char secFormat[SEC_FORMAT_SIZE];
+	char hourFormat[HOUR_FORMAT_SIZE] = " ";
+	char minFormat[MIN_FORMAT_SIZE] = "  ";
+	char secFormat[SEC_FORMAT_SIZE] = "  ";
 	if (!blinkHour) {
 		strncpy(hourFormat, "%01lu", HOUR_FORMAT_SIZE);
 	}	
@@ -55,14 +55,27 @@ bool ifVisibleChange(long *a, long *b) {
 	return strcmp(outA, outB);
 }
 
+unsigned long lastBlink = 0;
+const int BLINK_DELAY = 2 * 1000;
 void printTime(long *time, bool blinkHour = false, bool blinkMin = false, bool blinkSec = false) {
 	char text[LCD_COLUMNS + 1];
-	timeToText(time, text, blinkHour, blinkMin, blinkSec);
+	
+	unsigned long present = millis();
+	bool blink = false;
+	if (blinkHour || blinkMin || blinkSec) {
+		if (present - lastBlink >= BLINK_DELAY) {
+			blink = true;
+			lastBlink = present;
+		}
+	}
+	timeToText(time, text, blinkHour && blink, blinkMin && blink, blinkSec && blink);
+
 	lcd.print(text);
 }
 
 unsigned long lastTarget = 1000;
 unsigned long lastPassed = 1000;
+bool alarmPrinted = false;
 void loop() {
 	state.tickState();
 	switch (state.state) {
@@ -77,12 +90,13 @@ void loop() {
 		case RUNNING: {
 			if (ifVisibleChange(&lastPassed, &(state.timer.passed)) || ifVisibleChange(&lastTarget, &(state.timer.target))) {
 				lcd.clear();
-				printTime(&(state.timer.passed));
+				printTime(&(state.timer.passed), true, true, true);
 				lcd.print(F("/"));
 				printTime(&(state.timer.target));
 				lastPassed = state.timer.passed;
 				lastTarget = state.timer.target;
 			}
+			break;
 		}
 	}
 }
