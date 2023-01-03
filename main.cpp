@@ -46,21 +46,25 @@ char* getMinFormat(bool blink, char* out) {
 char* getSecFormat(bool blink, char* out) {
 	return getFormat(blink, 2, SEC_FORMAT_SIZE, out);
 }
-
-void timeToText(unsigned long* time, char *out, bool blinkHour = false, bool blinkMin = false, bool blinkSec = false) {
-	char format[FORMAT_SIZE];
+char* getTimeFormat(bool blinkHour, bool blinkMin, bool blinkSec, char* out) {
 	char hourOut[HOUR_FORMAT_SIZE];
 	char minOut[MIN_FORMAT_SIZE];
 	char secOut[SEC_FORMAT_SIZE];
 	snprintf(
-		format, 
+		out, 
 		FORMAT_SIZE, 
 		"%s:%s:%s", 
 		getHourFormat(blinkHour, hourOut),
 		getMinFormat(blinkMin, minOut), 
 		getSecFormat(blinkSec, secOut)
 	);
-	
+	return out;
+}
+
+void timeToText(unsigned long* time, char *out, bool blinkHour = false, bool blinkMin = false, bool blinkSec = false) {
+	char format[FORMAT_SIZE];
+	getTimeFormat(blinkHour, blinkMin, blinkSec, format);
+
 	// TODO: refactor
 	// NOTE: WHERE IS %x$ ON AVR???? anyway... ugly ifs ahead
 	// if you know a better solution, or know how to get indexing to work here... make a PR please
