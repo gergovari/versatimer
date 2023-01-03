@@ -60,66 +60,78 @@ char* getTimeFormat(bool blinkHour, bool blinkMin, bool blinkSec, char* out) {
 	);
 	return out;
 }
-
-void timeToText(unsigned long* time, char *out, bool blinkHour = false, bool blinkMin = false, bool blinkSec = false) {
+char* getTimeText(unsigned long *time, bool blinkHour, bool blinkMin, bool blinkSec, char* out) {
 	char format[FORMAT_SIZE];
 	getTimeFormat(blinkHour, blinkMin, blinkSec, format);
+
+	unsigned long hour = timeToHour(time);
+	unsigned long min = timeToMin(time);
+	unsigned long sec = timeToSec(time);
 
 	// TODO: refactor
 	// NOTE: WHERE IS %x$ ON AVR???? anyway... ugly ifs ahead
 	// if you know a better solution, or know how to get indexing to work here... make a PR please
-	char text[LCD_COLUMNS + 1];
-	unsigned long hour = timeToHour(time);
-	unsigned long min = timeToMin(time);
-	unsigned long sec = timeToSec(time);
 	if (blinkHour) {
 		if (blinkMin) {
 			if (blinkSec) {
-				snprintf(text, LCD_COLUMNS + 1, format);
+				snprintf(out, LCD_COLUMNS + 1, format);
 			} else {
-				snprintf(text, LCD_COLUMNS + 1, format, sec);
+				snprintf(out, LCD_COLUMNS + 1, format, sec);
 			}
 		} else {
 			if (blinkSec) {
-				snprintf(text, LCD_COLUMNS + 1, format, min);
+				snprintf(out, LCD_COLUMNS + 1, format, min);
 			} else {
-				snprintf(text, LCD_COLUMNS + 1, format, min, sec);
+				snprintf(out, LCD_COLUMNS + 1, format, min, sec);
 			}
 		}
 	} else if (blinkMin) {
 		if (blinkHour) {
 			if (blinkSec) {
-				snprintf(text, LCD_COLUMNS + 1, format);
+				snprintf(out, LCD_COLUMNS + 1, format);
 			} else {
-				snprintf(text, LCD_COLUMNS + 1, format, sec);
+				snprintf(out, LCD_COLUMNS + 1, format, sec);
 			}
 		} else {
 			if (blinkSec) {
-				snprintf(text, LCD_COLUMNS + 1, format, hour);
+				snprintf(out, LCD_COLUMNS + 1, format, hour);
 			} else {
-				snprintf(text, LCD_COLUMNS + 1, format, hour, sec);
+				snprintf(out, LCD_COLUMNS + 1, format, hour, sec);
 			}
 		}
 	} else if (blinkSec) {
 		if (blinkHour) {
 			if (blinkMin) {
-				snprintf(text, LCD_COLUMNS + 1, format);
+				snprintf(out, LCD_COLUMNS + 1, format);
 			} else {
-				snprintf(text, LCD_COLUMNS + 1, format, min);
+				snprintf(out, LCD_COLUMNS + 1, format, min);
 			}
 		} else {
 			if (blinkMin) {
-				snprintf(text, LCD_COLUMNS + 1, format, hour);
+				snprintf(out, LCD_COLUMNS + 1, format, hour);
 			} else {
-				snprintf(text, LCD_COLUMNS + 1, format, hour, min);
+				snprintf(out, LCD_COLUMNS + 1, format, hour, min);
 			}
 		}
 	} else {
-		snprintf(text, LCD_COLUMNS + 1, format, hour, min, sec);
+		snprintf(out, LCD_COLUMNS + 1, format, hour, min, sec);
 	}
 	// forgive me...
+	
+	return out;
+}
 
-	strncpy(out, text, LCD_COLUMNS + 1);
+
+char* timeToText(
+	unsigned long* time, 
+	char *out, 
+	bool blinkHour = false, 
+	bool blinkMin = false, 
+	bool blinkSec = false
+) {
+	char text[LCD_COLUMNS + 1];
+	strncpy(out, getTimeText(time, blinkHour, blinkMin, blinkSec, text), LCD_COLUMNS + 1);
+	return out;
 }
 
 unsigned long lastBlink = 0;
