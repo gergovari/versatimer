@@ -141,6 +141,7 @@ bool isBlinkNeeded() {
 }
 bool wasBlink = true;
 bool handleBlink(bool blinkHour, bool blinkMin, bool blinkSec) {
+	bool blink = false;
 	if (blinkHour || blinkMin || blinkSec) {
 		if (isBlinkNeeded()) {
 			blink = !wasBlink;
@@ -148,6 +149,7 @@ bool handleBlink(bool blinkHour, bool blinkMin, bool blinkSec) {
 			lastBlink = millis();
 		}
 	}
+	return blink;
 }
 
 bool ifVisibleChange(unsigned long *a, unsigned long *b, bool blink = false) {
@@ -157,9 +159,9 @@ bool ifVisibleChange(unsigned long *a, unsigned long *b, bool blink = false) {
 }
 
 void printTime(unsigned long *time, bool blinkHour = false, bool blinkMin = false, bool blinkSec = false) {
-	bool blink = handleBlink();
+	bool blink = handleBlink(blinkHour, blinkMin, blinkSec);
 	char text[LCD_COLUMNS + 1];
-	lcd.print(timeToText(time, text, blinkHour && blink, blinkMin && blink, blinkSec && blink););
+	lcd.print(timeToText(time, text, blinkHour && blink, blinkMin && blink, blinkSec && blink));
 }
 
 unsigned long lastTarget = 1000;
@@ -203,13 +205,15 @@ void tickUI() {
 		}
 	}
 }
+void setupUI() {
+	lcd.begin();
+	lcd.backlight();
+	lcd.setCursor(0, 0);
+}
 
 void setup() {
 	Serial.begin(9600);
-	lcd.begin();
-	lcd.backlight();
-	//lcd.noBacklight();
-	lcd.setCursor(0, 0);
+	setupUI();
 }
 
 void loop() {
