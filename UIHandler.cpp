@@ -181,9 +181,8 @@ void UIHandler::tick(StateHandler* state) {
 			}
 			break;
 		}
-		// FIXME: constant refresh
 		case ALARM: {
-			if (ifVisibleChange(0, 0, true)) {
+			if (ifVisibleChange(&(state -> timer.passed), &(state -> timer.passed), true)) {
 				lcd -> clear();
 				printTime(&(state -> timer.passed), true, true, true);
 				lcd -> print(F("/"));
