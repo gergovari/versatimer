@@ -48,5 +48,10 @@ void TimerHandler::tick() {
 		startMillis = currentMillis;
 		setStart = true;
 	}
-	passed = target - (currentMillis - startMillis) - idleOffset;
+	// NOTE: make sure we don't roll over
+	if (passed > target || (currentMillis - startMillis - idleOffset) > target) {
+		passed = 0;
+	} else {
+		passed = target - (currentMillis - startMillis) - idleOffset;
+	}
 }

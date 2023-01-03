@@ -19,7 +19,8 @@ void StateHandler::tickState() {
 	switch (state) {
 		case RUNNING: {
 			timer.tick();
-			if (timer.passed <= 0) {
+			// NOTE: remember, passed is UNSIGNED, can't be smaller than 0 (we roll over...)
+			if (timer.passed == 0) {
 				state = ALARM;
 			}
 			break;
