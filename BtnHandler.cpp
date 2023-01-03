@@ -1,6 +1,6 @@
 #include "BtnHandler.h"
 
-BtnHandler::BtnHandler() : btns({ &leftBtn, &rightBtn, &okBtn }) {
+BtnHandler::BtnHandler() : btns {&leftBtn, &rightBtn, &okBtn} {
 	leftBtn = OneButton(LEFT_PIN, true, true);
 	rightBtn = OneButton(RIGHT_PIN, true, true);
 	okBtn = OneButton(OK_PIN, true, true);
