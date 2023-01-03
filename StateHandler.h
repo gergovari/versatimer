@@ -12,6 +12,7 @@ class StateHandler {
 
 	void setupBtns();
 	void toggleState();
+	void reset();
 
 	public:
 		State state;

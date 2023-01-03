@@ -14,6 +14,13 @@ void StateHandler::setupBtns() {
 	);
 }
 
+// NOTE: for some reason *this = StateHandler() doesn't work...
+void StateHandler::reset() {
+	timer = TimerHandler();
+	alarm = AlarmHandler();
+	state = SETUP;
+}
+
 void StateHandler::tickState() {
 	btn.tickBtns();
 	switch (state) {
@@ -56,7 +63,7 @@ void StateHandler::toggleState() {
 			break;
 		}
 		case ALARM: {
-			*this = StateHandler();
+			reset();
 			break;
 		}
 	}

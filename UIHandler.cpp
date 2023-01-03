@@ -161,7 +161,6 @@ void UIHandler::tick(StateHandler* state) {
 	bool sec = multState == SEC;
 
 	switch (state -> state) {
-		// FIXME: cant redo setup, only work once
 		case SETUP: {
 			if (ifVisibleChange(&lastTarget, &(state -> timer.target), true)) {
 				lcd -> clear();
