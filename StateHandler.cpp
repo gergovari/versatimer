@@ -18,14 +18,10 @@ void StateHandler::tickState() {
 	btn.tickBtns();
 	switch (state) {
 		case RUNNING: {
-			timer.tickTimer();
+			timer.tick();
 			if (timer.passed <= 0) {
 				state = ALARM;
 			}
-			break;
-		}
-		case IDLE: {
-			timer.tickIdle();
 			break;
 		}
 		case ALARM: {
@@ -50,10 +46,12 @@ void StateHandler::toggleState() {
 		}
 		case RUNNING: {
 			state = IDLE;
+			timer.startIdle();
 			break;
 		}
 		case IDLE: {
 			state = RUNNING;
+			timer.stopIdle();
 			break;
 		}
 		case ALARM: {

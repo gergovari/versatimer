@@ -13,8 +13,9 @@ class TimerHandler {
 	unsigned long startMillis;
 	bool setStart;
 	signed long curMult;
-	bool isIdleStarted;
 	unsigned long idleStart;
+	unsigned long idleOffset;
+
 	public:
 		unsigned long target;
 		unsigned long passed;
@@ -24,8 +25,9 @@ class TimerHandler {
 		void advanceMult();
 		bool isSetupFinished();
 		void addToTarget(signed int sign);
-		void tickIdle();
-		void tickTimer();
+		void tick();
+		void startIdle();
+		void stopIdle();
 };
 
 #endif

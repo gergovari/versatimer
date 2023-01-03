@@ -6,8 +6,8 @@ TimerHandler::TimerHandler() {
 	startMillis = 0;
 	setStart = false;
 	curMult = 1000;
-	isIdleStarted = false;
 	idleStart = 0;
+	idleOffset = 0;
 }
 
 MULT_STATE TimerHandler::getMultState() {
@@ -35,21 +35,18 @@ void TimerHandler::addToTarget(signed int sign) {
 	}
 }
 
-void TimerHandler::tickIdle() {
-	if (isIdleStarted) {
-		idleStart = millis();
-	}
+void TimerHandler::startIdle() {
+	idleStart = millis();
+}
+void TimerHandler::stopIdle() {
+	idleOffset -= millis() - idleStart;
 }
 
-void TimerHandler::tickTimer() {
+void TimerHandler::tick() {
 	unsigned long currentMillis = millis();
-	if (isIdleStarted) {
-		target += currentMillis - idleStart;
-		isIdleStarted = false;
-	}
 	if (!setStart) {
 		startMillis = currentMillis;
 		setStart = true;
 	}
-	passed = target - (currentMillis - startMillis);
+	passed = target - (currentMillis - startMillis) - idleOffset;
 }
