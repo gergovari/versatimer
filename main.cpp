@@ -139,20 +139,8 @@ const int BLINK_DELAY = 500;
 bool isBlinkNeeded() {
 	return millis() - lastBlink >= BLINK_DELAY;
 }
-
-bool ifVisibleChange(unsigned long *a, unsigned long *b, bool blink = false) {
-	char outA[LCD_COLUMNS + 1];
-	timeToText(a, outA);
-	char outB[LCD_COLUMNS + 1];
-	timeToText(b, outB);
-	return strcmp(outA, outB) || (blink && isBlinkNeeded());
-}
-
 bool wasBlink = true;
-void printTime(unsigned long *time, bool blinkHour = false, bool blinkMin = false, bool blinkSec = false) {
-	char text[LCD_COLUMNS + 1];
-	
-	bool blink = false;
+bool handleBlink(bool blinkHour, bool blinkMin, bool blinkSec) {
 	if (blinkHour || blinkMin || blinkSec) {
 		if (isBlinkNeeded()) {
 			blink = !wasBlink;
@@ -160,9 +148,18 @@ void printTime(unsigned long *time, bool blinkHour = false, bool blinkMin = fals
 			lastBlink = millis();
 		}
 	}
-	timeToText(time, text, blinkHour && blink, blinkMin && blink, blinkSec && blink);
+}
 
-	lcd.print(text);
+bool ifVisibleChange(unsigned long *a, unsigned long *b, bool blink = false) {
+	char outA[LCD_COLUMNS + 1];
+	char outB[LCD_COLUMNS + 1];
+	return strcmp(timeToText(a, outA), timeToText(b, outB)) || (blink && isBlinkNeeded());
+}
+
+void printTime(unsigned long *time, bool blinkHour = false, bool blinkMin = false, bool blinkSec = false) {
+	bool blink = handleBlink();
+	char text[LCD_COLUMNS + 1];
+	lcd.print(timeToText(time, text, blinkHour && blink, blinkMin && blink, blinkSec && blink););
 }
 
 unsigned long lastTarget = 1000;
