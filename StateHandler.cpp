@@ -7,8 +7,16 @@ StateHandler::StateHandler() {
 
 void StateHandler::setupBtns() {
 	btn.setupBtns(
-		[](void *state){(*((StateHandler*)state)).timer.addToTarget(-1);}, 
-		[](void *state){(*((StateHandler*)state)).timer.addToTarget(1);},
+		[](void *state){
+			if ((*((StateHandler*)state)).state == SETUP) {
+				(*((StateHandler*)state)).timer.addToTarget(-1);
+			}
+		}, 
+		[](void *state){
+			if ((*((StateHandler*)state)).state == SETUP) {
+				(*((StateHandler*)state)).timer.addToTarget(1);
+			}
+		}, 
 		[](void *state){(*((StateHandler*)state)).toggleState();},
 		this
 	);
