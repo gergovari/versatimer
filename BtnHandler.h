@@ -9,16 +9,14 @@
 #define RIGHT_PIN 5
 #define OK_PIN 6
 class BtnHandler {
-	OneButton leftBtn;
-	OneButton rightBtn;
-	OneButton okBtn;
 	OneButton *btns[3] {};
-
 	public:
-		BtnHandler();
+		OneButton leftBtn;
+		OneButton rightBtn;
+		OneButton okBtn;
 
-	void setupBtns(void (*)(void*), void (*)(void*), void (*)(void*), void*);
-	void tickBtns();
+		BtnHandler();
+		void tickBtns();
 };
 
 #endif
