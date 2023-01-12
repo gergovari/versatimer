@@ -1,5 +1,7 @@
 #include "TimerHandler.h"
 
+#include <Arduino.h>
+
 TimerHandler::TimerHandler() {
 	target = 0;
 	passed = 0;
@@ -39,7 +41,7 @@ void TimerHandler::startIdle() {
 	idleStart = millis();
 }
 void TimerHandler::stopIdle() {
-	idleOffset -= millis() - idleStart;
+	idleOffset += millis() - idleStart;
 }
 
 void TimerHandler::tick() {
@@ -49,9 +51,9 @@ void TimerHandler::tick() {
 		setStart = true;
 	}
 	// NOTE: make sure we don't roll over
-	if (passed > target || (currentMillis - startMillis - idleOffset) > target) {
+	if (passed > target) {
 		passed = 0;
 	} else {
-		passed = target - (currentMillis - startMillis) - idleOffset;
+		passed = (target + idleOffset) - (currentMillis - startMillis);
 	}
 }
