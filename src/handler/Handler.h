@@ -1,8 +1,8 @@
 #ifndef HANDLER_H
 #define HANDLER_H
 
-#include "BtnManager.h"
-#include "UIManager.h"
+#include "../manager/BtnManager.h"
+#include "../manager/UIManager.h"
 
 class Handler {
 	public:

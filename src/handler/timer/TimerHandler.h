@@ -1,9 +1,9 @@
 #ifndef TIMERHANDLER_H
 #define TIMERHANDLER_H
 
-#include "../../Handler.h"
-#include "../../BtnManager.h"
-#include "../../UIManager.h"
+#include "../Handler.h"
+#include "../../manager/BtnManager.h"
+#include "../../manager/UIManager.h"
 
 #include "TimerState.h"
 #include "Timer.h"
