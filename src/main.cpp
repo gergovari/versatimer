@@ -9,15 +9,22 @@
 BtnManager btn;
 UIManager ui;
 
-TimerHandler handler;
+TimerHandler timer = TimerHandler();
+Handler* handlers[] = { &timer };
+Handler* handler = handlers[0];
+void setupHandlers() {
+	for (unsigned int i = 0; i < sizeof(handlers)/sizeof(handlers[0]); i++) {
+		handlers[i] -> setupBtns(&btn);
+	}
+}
 
 void setup() {
 	Serial.begin(9600);
-	handler.setupBtns(&btn);
+	setupHandlers();
 	ui.begin();
 }
 
 void loop() {
 	btn.tick();
-	handler.tick(&ui);
+	handler -> tick(&ui);
 }
