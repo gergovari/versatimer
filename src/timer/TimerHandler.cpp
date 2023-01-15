@@ -48,7 +48,7 @@ void TimerHandler::tickState() {
 	}
 }
 
-void TimerHandler::tickUI(UIHandler* ui) {
+void TimerHandler::tickUI(UIManager* ui) {
 	switch (state) {
 		case SETUP: {
 			MULT_STATE multState = timer.getMultState();
@@ -69,7 +69,7 @@ void TimerHandler::tickUI(UIHandler* ui) {
 	}
 }
 
-void TimerHandler::tick(UIHandler* ui) {
+void TimerHandler::tick(UIManager* ui) {
 	tickState();
 	tickUI(ui);
 }

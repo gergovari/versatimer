@@ -1,28 +1,28 @@
-#include "UIHandler.h"
+#include "UIManager.h"
 
-void UIHandler::begin() {
+void UIManager::begin() {
 	lcd = new LCD_I2C(LCD_ADDRESS, LCD_COLUMNS, LCD_ROWS);
 	lcd -> begin();
 	lcd -> backlight();
 	lcd -> setCursor(0, 0);
 }
 
-bool UIHandler::isBlinkNeeded() {
+bool UIManager::isBlinkNeeded() {
 	return millis() - lastBlink >= BLINK_DELAY;
 }
 
 // NOTE: would not doing unnecessary calculations improve perf?
-unsigned long UIHandler::timeToHour(unsigned long* time) {
+unsigned long UIManager::timeToHour(unsigned long* time) {
 	return *time / 1000 / 60 / 60;
 }
-unsigned long UIHandler::timeToMin(unsigned long* time) {
+unsigned long UIManager::timeToMin(unsigned long* time) {
 	return (*time - (timeToHour(time) * 1000 * 60 * 60)) / 1000 / 60;
 }
-unsigned long UIHandler::timeToSec(unsigned long* time) {
+unsigned long UIManager::timeToSec(unsigned long* time) {
 	return (*time - (timeToHour(time) * 1000 * 60 * 60) - (timeToMin(time) * 1000 * 60)) / 1000;
 }
 
-char* UIHandler::getFormat(bool blink, int width, int size, char* out) {
+char* UIManager::getFormat(bool blink, int width, int size, char* out) {
 	if (blink) {
 		memset(out, '\0', width + 1);
 		memset(out, ' ', width);
@@ -33,16 +33,16 @@ char* UIHandler::getFormat(bool blink, int width, int size, char* out) {
 	}
 	return out;
 }
-char* UIHandler::getHourFormat(bool blink, char* out) {
+char* UIManager::getHourFormat(bool blink, char* out) {
 	return getFormat(blink, 1, HOUR_FORMAT_SIZE, out);
 }
-char* UIHandler::getMinFormat(bool blink, char* out) {
+char* UIManager::getMinFormat(bool blink, char* out) {
 	return getFormat(blink, 2, MIN_FORMAT_SIZE, out);
 }
-char* UIHandler::getSecFormat(bool blink, char* out) {
+char* UIManager::getSecFormat(bool blink, char* out) {
 	return getFormat(blink, 2, SEC_FORMAT_SIZE, out);
 }
-char* UIHandler::getTimeFormat(bool blinkHour, bool blinkMin, bool blinkSec, char* out) {
+char* UIManager::getTimeFormat(bool blinkHour, bool blinkMin, bool blinkSec, char* out) {
 	char hourOut[HOUR_FORMAT_SIZE];
 	char minOut[MIN_FORMAT_SIZE];
 	char secOut[SEC_FORMAT_SIZE];
@@ -57,7 +57,7 @@ char* UIHandler::getTimeFormat(bool blinkHour, bool blinkMin, bool blinkSec, cha
 	return out;
 }
 
-char* UIHandler::getTimeText(unsigned long *time, bool blinkHour, bool blinkMin, bool blinkSec, char* out) {
+char* UIManager::getTimeText(unsigned long *time, bool blinkHour, bool blinkMin, bool blinkSec, char* out) {
 	char format[FORMAT_SIZE];
 	getTimeFormat(blinkHour, blinkMin, blinkSec, format);
 
@@ -118,7 +118,7 @@ char* UIHandler::getTimeText(unsigned long *time, bool blinkHour, bool blinkMin,
 	return out;
 }
 
-char* UIHandler::timeToText(
+char* UIManager::timeToText(
 	unsigned long* time, 
 	char *out, 
 	bool blinkHour = false, 
@@ -130,13 +130,13 @@ char* UIHandler::timeToText(
 	return out;
 }
 
-bool UIHandler::ifVisibleChange(unsigned long *a, unsigned long *b, bool blink = false) {
+bool UIManager::ifVisibleChange(unsigned long *a, unsigned long *b, bool blink = false) {
 	char outA[LCD_COLUMNS + 1];
 	char outB[LCD_COLUMNS + 1];
 	return strcmp(timeToText(a, outA), timeToText(b, outB)) || (blink && isBlinkNeeded());
 }
 
-bool UIHandler::handleBlink(bool blinkHour, bool blinkMin, bool blinkSec) {
+bool UIManager::handleBlink(bool blinkHour, bool blinkMin, bool blinkSec) {
 	bool blink = false;
 	if (blinkHour || blinkMin || blinkSec) {
 		if (isBlinkNeeded()) {
@@ -148,13 +148,13 @@ bool UIHandler::handleBlink(bool blinkHour, bool blinkMin, bool blinkSec) {
 	return blink;
 }
 
-void UIHandler::printTime(unsigned long *time, bool blinkHour = false, bool blinkMin = false, bool blinkSec = false) {
+void UIManager::printTime(unsigned long *time, bool blinkHour = false, bool blinkMin = false, bool blinkSec = false) {
 	bool blink = handleBlink(blinkHour, blinkMin, blinkSec);
 	char text[LCD_COLUMNS + 1];
 	lcd -> print(timeToText(time, text, blinkHour && blink, blinkMin && blink, blinkSec && blink));
 }
 
-void UIHandler::printSetup(unsigned long *target, bool hour, bool min, bool sec) {
+void UIManager::printSetup(unsigned long *target, bool hour, bool min, bool sec) {
 	if (ifVisibleChange(&lastTarget, target, true)) {
 		lcd -> clear();
 		printTime(target, hour, min, sec);
@@ -162,7 +162,7 @@ void UIHandler::printSetup(unsigned long *target, bool hour, bool min, bool sec)
 	}
 }
 
-void UIHandler::printRunning(unsigned long *target, unsigned long *passed) {
+void UIManager::printRunning(unsigned long *target, unsigned long *passed) {
 	if (ifVisibleChange(&lastPassed, passed) || ifVisibleChange(&lastTarget, target)) {
 		lcd -> clear();
 		printTime(passed);
@@ -173,7 +173,7 @@ void UIHandler::printRunning(unsigned long *target, unsigned long *passed) {
 	}
 }
 
-void UIHandler::printAlarm(unsigned long *target, unsigned long *passed) {
+void UIManager::printAlarm(unsigned long *target, unsigned long *passed) {
 	if (ifVisibleChange(passed, passed, true)) {
 		lcd -> clear();
 		printTime(passed, true, true, true);

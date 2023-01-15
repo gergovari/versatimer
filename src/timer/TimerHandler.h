@@ -3,7 +3,7 @@
 
 #include "../../Handler.h"
 #include "../../BtnManager.h"
-#include "../../UIHandler.h"
+#include "../../UIManager.h"
 
 #include "TimerState.h"
 #include "Timer.h"
@@ -14,7 +14,7 @@ class TimerHandler: public Handler {
 	AlarmHandler alarm;
 	
 	void tickState();
-	void tickUI(UIHandler*);
+	void tickUI(UIManager*);
 
 	void toggleState();
 	void reset();
@@ -24,7 +24,7 @@ class TimerHandler: public Handler {
 		Timer timer;
 		
 		void setupBtns(BtnManager*);
-		void tick(UIHandler*);
+		void tick(UIManager*);
 };
 
 #endif

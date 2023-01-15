@@ -4,7 +4,7 @@
 
 #include <LCD_I2C.h>
 
-class UIHandler {
+class UIManager {
 	const int LCD_COLUMNS = 16;
 	const int LCD_ROWS = 2;
 	const int LCD_ADDRESS = 0x27;

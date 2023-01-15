@@ -2,12 +2,12 @@
 #define HANDLER_H
 
 #include "BtnManager.h"
-#include "UIHandler.h"
+#include "UIManager.h"
 
 class Handler {
 	public:
 		virtual void setupBtns(BtnManager*) {};
-		virtual void tick(UIHandler*) {};
+		virtual void tick(UIManager*) {};
 };
 
 #endif
