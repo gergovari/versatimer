@@ -1,13 +1,13 @@
 #ifndef TIMERHANDLER_H
 #define TIMERHANDLER_H
 
-#include "../Handler.h"
-#include "../BtnHandler.h"
+#include "../../Handler.h"
+#include "../../BtnHandler.h"
 
-#include "Timer.h"
 #include "TimerState.h"
+#include "Timer.h"
 
-#include "../AlarmHandler.h"
+#include "../../AlarmHandler.h"
 
 class TimerHandler: public Handler {
 	AlarmHandler alarm;
@@ -19,6 +19,7 @@ class TimerHandler: public Handler {
 		TimerState state;
 		Timer timer;
 		
+		void setupBtns(BtnHandler*);
 		void tick();
 };
 

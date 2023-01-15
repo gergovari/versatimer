@@ -1,6 +1,8 @@
 #ifndef TIMER_H
 #define TIMER_H
 
+#include <Arduino.h>
+
 enum MULT_STATE {
 	SEC,
 	MIN,
@@ -8,17 +10,16 @@ enum MULT_STATE {
 };
 
 class Timer {
-	unsigned long startMillis;
-	bool setStart;
-	signed long curMult;
-	unsigned long idleStart;
-	unsigned long idleOffset;
+	unsigned long startMillis = 0;
+	bool setStart = false;
+	signed long curMult = 1000;
+	unsigned long idleStart = 0;
+	unsigned long idleOffset = 0;
 
 	public:
-		unsigned long target;
-		unsigned long passed;
+		unsigned long target = 0;
+		unsigned long passed = 0;
 
-		Timer();
 		MULT_STATE getMultState();
 		void advanceMult();
 		bool isSetupFinished();

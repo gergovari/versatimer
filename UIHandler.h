@@ -3,9 +3,7 @@
 #define UIHANDLER_H
 
 #include <LCD_I2C.h>
-#include "timer/TimerState.h"
-#include "timer/TimerHandler.h"
-#include "timer/Timer.h"
+#include "src/timer/TimerHandler.h"
 
 class UIHandler {
 	const int LCD_COLUMNS = 16;

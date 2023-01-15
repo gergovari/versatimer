@@ -3,8 +3,7 @@
 #include "BtnHandler.h"
 #include "UIHandler.h"
 
-#include "Handler.h"
-#include "timer/TimerHandler.h"
+#include "src/timer/TimerHandler.h"
 
 BtnHandler btn;
 UIHandler UI;

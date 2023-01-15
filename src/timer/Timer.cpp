@@ -1,15 +1,5 @@
 #include "Timer.h"
 
-Timer::Timer() {
-	target = 0;
-	passed = 0;
-	startMillis = 0;
-	setStart = false;
-	curMult = 1000;
-	idleStart = 0;
-	idleOffset = 0;
-}
-
 MULT_STATE Timer::getMultState() {
 	MULT_STATE state = SEC;
 	if (curMult == (long)1000 * 60) {
