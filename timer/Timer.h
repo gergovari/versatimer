@@ -1,7 +1,5 @@
-#ifndef TIMERHANDLER_H
-#define TIMERHANDLER_H
-
-#include <Arduino.h>
+#ifndef TIMER_H
+#define TIMER_H
 
 enum MULT_STATE {
 	SEC,
@@ -9,7 +7,7 @@ enum MULT_STATE {
 	HOUR
 };
 
-class TimerHandler {
+class Timer {
 	unsigned long startMillis;
 	bool setStart;
 	signed long curMult;
@@ -20,7 +18,7 @@ class TimerHandler {
 		unsigned long target;
 		unsigned long passed;
 
-		TimerHandler();
+		Timer();
 		MULT_STATE getMultState();
 		void advanceMult();
 		bool isSetupFinished();

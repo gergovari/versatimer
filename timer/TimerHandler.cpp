@@ -1,36 +1,34 @@
-#include "StateHandler.h"
+#include "TimerHandler.h"
 
-StateHandler::StateHandler() {
-	state = SETUP;
-	setupBtns();
-}
-
-void StateHandler::setupBtns() {
-	btn.setupBtns(
+void TimerHandler::setupBtns(BtnHandler* btn) {
+	btn -> leftBtn.attachClick(
 		[](void *state){
-			if ((*((StateHandler*)state)).state == SETUP) {
-				(*((StateHandler*)state)).timer.addToTarget(-1);
+			if ((*((TimerHandler*)state)).state == SETUP) {
+				(*((TimerHandler*)state)).timer.addToTarget(-1);
 			}
-		}, 
+		}, this
+	);
+	btn -> rightBtn.attachClick(
 		[](void *state){
-			if ((*((StateHandler*)state)).state == SETUP) {
-				(*((StateHandler*)state)).timer.addToTarget(1);
+			if ((*((TimerHandler*)state)).state == SETUP) {
+				(*((TimerHandler*)state)).timer.addToTarget(1);
 			}
-		}, 
-		[](void *state){(*((StateHandler*)state)).toggleState();},
-		this
+		}, this
+	);
+	btn -> okBtn.attachClick(
+		[](void *state){
+			(*((TimerHandler*)state)).toggleState();
+		}, this
 	);
 }
 
-// NOTE: for some reason *this = StateHandler() doesn't work...
-void StateHandler::reset() {
-	timer = TimerHandler();
-	alarm = AlarmHandler();
+void TimerHandler::reset() {
+	timer = Timer();
+	alarm = AlarmTimerHandler();
 	state = SETUP;
 }
 
-void StateHandler::tickState() {
-	btn.tickBtns();
+void TimerHandler::tick() {
 	switch (state) {
 		case RUNNING: {
 			timer.tick();
@@ -50,7 +48,7 @@ void StateHandler::tickState() {
 	}
 }
 
-void StateHandler::toggleState() {
+void TimerHandler::toggleState() {
 	switch (state) {
 		case SETUP: {
 			if (timer.isSetupFinished()) {

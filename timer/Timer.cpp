@@ -1,8 +1,6 @@
-#include "TimerHandler.h"
+#include "Timer.h"
 
-#include <Arduino.h>
-
-TimerHandler::TimerHandler() {
+Timer::Timer() {
 	target = 0;
 	passed = 0;
 	startMillis = 0;
@@ -12,7 +10,7 @@ TimerHandler::TimerHandler() {
 	idleOffset = 0;
 }
 
-MULT_STATE TimerHandler::getMultState() {
+MULT_STATE Timer::getMultState() {
 	MULT_STATE state = SEC;
 	if (curMult == (long)1000 * 60) {
 		state = MIN;
@@ -22,29 +20,29 @@ MULT_STATE TimerHandler::getMultState() {
 	return state;
 }
 
-void TimerHandler::advanceMult() {
+void Timer::advanceMult() {
 	curMult *= 60ul;
 }
 
-bool TimerHandler::isSetupFinished() {
+bool Timer::isSetupFinished() {
 	return curMult == (long) 1000 * 60 * 60;
 }
 
-void TimerHandler::addToTarget(signed int sign) {
+void Timer::addToTarget(signed int sign) {
 	signed long milli = sign * curMult;
 	if ((signed long) target + milli >= 0) {
 		target += milli;
 	}
 }
 
-void TimerHandler::startIdle() {
+void Timer::startIdle() {
 	idleStart = millis();
 }
-void TimerHandler::stopIdle() {
+void Timer::stopIdle() {
 	idleOffset += millis() - idleStart;
 }
 
-void TimerHandler::tick() {
+void Timer::tick() {
 	unsigned long currentMillis = millis();
 	if (!setStart) {
 		startMillis = currentMillis;

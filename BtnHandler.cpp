@@ -6,7 +6,7 @@ BtnHandler::BtnHandler() : btns {&leftBtn, &rightBtn, &okBtn} {
 	okBtn = OneButton(OK_PIN, true, true);
 }
 
-void BtnHandler::tickBtns() {
+void BtnHandler::tick() {
 	for (unsigned int i = 0; i < sizeof(btns)/sizeof(btns[0]); i++) {
 		btns[i] -> tick();
 	}

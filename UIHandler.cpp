@@ -154,7 +154,7 @@ void UIHandler::printTime(unsigned long *time, bool blinkHour = false, bool blin
 	lcd -> print(timeToText(time, text, blinkHour && blink, blinkMin && blink, blinkSec && blink));
 }
 
-void UIHandler::tick(StateHandler* state) {
+void UIHandler::tick(TimerHandler* state) {
 	MULT_STATE multState = state -> timer.getMultState();
 	bool hour = multState == HOUR;
 	bool min = multState == MIN;

@@ -1,8 +1,6 @@
 #ifndef BtnHandler_H
 #define BtnHandler_H
 
-#include "State.h"
-
 #include <OneButton.h>
 
 #define LEFT_PIN 4
@@ -16,7 +14,7 @@ class BtnHandler {
 		OneButton okBtn;
 
 		BtnHandler();
-		void tickBtns();
+		void tick();
 };
 
 #endif

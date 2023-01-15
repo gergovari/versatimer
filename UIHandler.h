@@ -3,9 +3,9 @@
 #define UIHANDLER_H
 
 #include <LCD_I2C.h>
-#include "State.h"
-#include "TimerHandler.h"
-#include "StateHandler.h"
+#include "timer/TimerState.h"
+#include "timer/TimerHandler.h"
+#include "timer/Timer.h"
 
 class UIHandler {
 	const int LCD_COLUMNS = 16;
@@ -44,7 +44,7 @@ class UIHandler {
 	public:
 		// NOTE: on avr/arduino(?) beginning stuff like this in a constructor breaks...
 		void begin();
-		void tick(StateHandler*);
+		void tick(TimerHandler*);
 };
 
 #endif

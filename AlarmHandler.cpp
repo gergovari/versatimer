@@ -1,5 +1,7 @@
 #include "AlarmHandler.h"
 
+#include <Arduino.h>
+
 AlarmHandler::AlarmHandler() {
 	setState(false);
 }

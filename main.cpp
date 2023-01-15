@@ -1,17 +1,24 @@
 #include <Arduino.h>
 
-#include "StateHandler.h"
+#include "BtnHandler.h"
 #include "UIHandler.h"
 
-StateHandler state;
+#include "Handler.h"
+#include "timer/TimerHandler.h"
+
+BtnHandler btn;
 UIHandler UI;
+
+TimerHandler timer;
 
 void setup() {
 	Serial.begin(9600);
+	timer.setupBtns(&btn);
 	UI.begin();
 }
 
 void loop() {
-	state.tickState();
-	UI.tick(&state);
+	btn.tick();
+	timer.tick();
+	UI.tick(&timer);
 }
