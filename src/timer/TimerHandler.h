@@ -2,7 +2,7 @@
 #define TIMERHANDLER_H
 
 #include "../../Handler.h"
-#include "../../BtnHandler.h"
+#include "../../BtnManager.h"
 #include "../../UIHandler.h"
 
 #include "TimerState.h"
@@ -23,7 +23,7 @@ class TimerHandler: public Handler {
 		TimerState state;
 		Timer timer;
 		
-		void setupBtns(BtnHandler*);
+		void setupBtns(BtnManager*);
 		void tick(UIHandler*);
 };
 

@@ -1,8 +1,6 @@
 #include "TimerHandler.h"
 
-#include <Arduino.h>
-
-void TimerHandler::setupBtns(BtnHandler* btn) {
+void TimerHandler::setupBtns(BtnManager* btn) {
 	btn -> leftBtn.attachClick(
 		[](void *state){
 			if ((*((TimerHandler*)state)).state == SETUP) {

@@ -1,12 +1,12 @@
 #include <Arduino.h>
 
-#include "BtnHandler.h"
+#include "BtnManager.h"
 #include "UIHandler.h"
 
 #include "Handler.h"
 #include "src/timer/TimerHandler.h"
 
-BtnHandler btn;
+BtnManager btn;
 UIHandler ui;
 
 TimerHandler handler;
