@@ -3,12 +3,12 @@
 
 #include "../Handler.h"
 #include "../../manager/BtnManager.h"
+#include "../../manager/AlarmManager.h"
 #include "../../manager/UIManager.h"
 
 #include "TimerState.h"
 #include "Timer.h"
 
-#include "../../AlarmManager.h"
 
 class TimerHandler: public Handler {
 	AlarmManager alarm;
