@@ -8,10 +8,10 @@
 #include "TimerState.h"
 #include "Timer.h"
 
-#include "../../AlarmHandler.h"
+#include "../../AlarmManager.h"
 
 class TimerHandler: public Handler {
-	AlarmHandler alarm;
+	AlarmManager alarm;
 	
 	void tickState();
 	void tickUI(UIManager*);

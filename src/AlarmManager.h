@@ -3,11 +3,11 @@
 
 #define ALARM_PIN 3
 
-class AlarmHandler {
+class AlarmManager {
 	void updateAlarm();
 	public:
 		bool state = false;
-		AlarmHandler();
+		AlarmManager();
 		void setState(bool newState);
 };
 

@@ -24,7 +24,7 @@ void TimerHandler::setupBtns(BtnManager* btn) {
 
 void TimerHandler::reset() {
 	timer = Timer();
-	alarm = AlarmHandler();
+	alarm = AlarmManager();
 	state = SETUP;
 }
 
