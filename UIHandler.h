@@ -3,7 +3,6 @@
 #define UIHANDLER_H
 
 #include <LCD_I2C.h>
-#include "src/timer/TimerHandler.h"
 
 class UIHandler {
 	const int LCD_COLUMNS = 16;
@@ -42,7 +41,10 @@ class UIHandler {
 	public:
 		// NOTE: on avr/arduino(?) beginning stuff like this in a constructor breaks...
 		void begin();
-		void tick(TimerHandler*);
+
+		void printSetup(unsigned long*, bool, bool, bool);
+		void printRunning(unsigned long*, unsigned long*);
+		void printAlarm(unsigned long*, unsigned long*);
 };
 
 #endif

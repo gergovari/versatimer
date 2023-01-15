@@ -1,5 +1,7 @@
 #include "TimerHandler.h"
 
+#include <Arduino.h>
+
 void TimerHandler::setupBtns(BtnHandler* btn) {
 	btn -> leftBtn.attachClick(
 		[](void *state){
@@ -28,7 +30,7 @@ void TimerHandler::reset() {
 	state = SETUP;
 }
 
-void TimerHandler::tick() {
+void TimerHandler::tickState() {
 	switch (state) {
 		case RUNNING: {
 			timer.tick();
@@ -46,6 +48,32 @@ void TimerHandler::tick() {
 			break;	 
 		}
 	}
+}
+
+void TimerHandler::tickUI(UIHandler* ui) {
+	switch (state) {
+		case SETUP: {
+			MULT_STATE multState = timer.getMultState();
+			ui -> printSetup(&(timer.target), multState == HOUR, multState == MIN, multState == SEC);
+			break;
+		}
+		case RUNNING: {
+			ui -> printRunning(&(timer.target), &(timer.passed));
+			break;
+		}
+		case ALARM: {
+			ui -> printAlarm(&(timer.target), &(timer.passed));
+			break;
+		}
+		default: {
+			break;	 
+		}
+	}
+}
+
+void TimerHandler::tick(UIHandler* ui) {
+	tickState();
+	tickUI(ui);
 }
 
 void TimerHandler::toggleState() {

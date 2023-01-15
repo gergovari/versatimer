@@ -154,42 +154,30 @@ void UIHandler::printTime(unsigned long *time, bool blinkHour = false, bool blin
 	lcd -> print(timeToText(time, text, blinkHour && blink, blinkMin && blink, blinkSec && blink));
 }
 
-void UIHandler::tick(TimerHandler* state) {
-	MULT_STATE multState = state -> timer.getMultState();
-	bool hour = multState == HOUR;
-	bool min = multState == MIN;
-	bool sec = multState == SEC;
+void UIHandler::printSetup(unsigned long *target, bool hour, bool min, bool sec) {
+	if (ifVisibleChange(&lastTarget, target, true)) {
+		lcd -> clear();
+		printTime(target, hour, min, sec);
+		lastTarget = *target;
+	}
+}
 
-	switch (state -> state) {
-		case SETUP: {
-			if (ifVisibleChange(&lastTarget, &(state -> timer.target), true)) {
-				lcd -> clear();
-				printTime(&(state -> timer.target), hour, min, sec);
-				lastTarget = state -> timer.target;
-			}
-			break;
-		}
-		case RUNNING: {
-			if (ifVisibleChange(&lastPassed, &(state -> timer.passed)) || ifVisibleChange(&lastTarget, &(state -> timer.target))) {
-				lcd -> clear();
-				printTime(&(state -> timer.passed));
-				lcd -> print(F("/"));
-				printTime(&(state -> timer.target));
-				lastPassed = state -> timer.passed;
-				lastTarget = state -> timer.target;
-			}
-			break;
-		}
-		case ALARM: {
-			if (ifVisibleChange(&(state -> timer.passed), &(state -> timer.passed), true)) {
-				lcd -> clear();
-				printTime(&(state -> timer.passed), true, true, true);
-				lcd -> print(F("/"));
-				printTime(&(state -> timer.target));
-			}
-		}
-		default: {
-			break;	 
-		}
+void UIHandler::printRunning(unsigned long *target, unsigned long *passed) {
+	if (ifVisibleChange(&lastPassed, passed) || ifVisibleChange(&lastTarget, target)) {
+		lcd -> clear();
+		printTime(passed);
+		lcd -> print(F("/"));
+		printTime(target);
+		lastPassed = *passed;
+		lastTarget = *target;
+	}
+}
+
+void UIHandler::printAlarm(unsigned long *target, unsigned long *passed) {
+	if (ifVisibleChange(passed, passed, true)) {
+		lcd -> clear();
+		printTime(passed, true, true, true);
+		lcd -> print(F("/"));
+		printTime(target);
 	}
 }

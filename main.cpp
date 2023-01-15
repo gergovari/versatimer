@@ -3,21 +3,21 @@
 #include "BtnHandler.h"
 #include "UIHandler.h"
 
+#include "Handler.h"
 #include "src/timer/TimerHandler.h"
 
 BtnHandler btn;
-UIHandler UI;
+UIHandler ui;
 
-TimerHandler timer;
+TimerHandler handler;
 
 void setup() {
 	Serial.begin(9600);
-	timer.setupBtns(&btn);
-	UI.begin();
+	handler.setupBtns(&btn);
+	ui.begin();
 }
 
 void loop() {
 	btn.tick();
-	timer.tick();
-	UI.tick(&timer);
+	handler.tick(&ui);
 }
