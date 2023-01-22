@@ -51,7 +51,7 @@ class UIManager {
 		void printRunning(unsigned long*, unsigned long*);
 		void printAlarm(unsigned long*, unsigned long*);
 
-		void printMsg(char*);
+		void printMsg(char*, bool);
 };
 
 #endif

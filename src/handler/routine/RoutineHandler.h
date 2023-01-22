@@ -12,9 +12,27 @@ enum RoutineState {
 	SET_RECORD
 };
 
+struct Record {
+	char name[4];
+	int value;
+};
+struct Set {
+	char name[17];
+	unsigned long duration;
+	Record records[];
+};
+struct Routine {
+	char name[16];
+	unsigned int setCount;
+	Set sets[];
+};
+
 class RoutineHandler: public Handler {
 	RoutineState state = SET_RUNNING;
 	Timer timer;
+
+	void toggleState();
+	bool tickSet(UIManager*, AlarmManager*, Set*);
 
 	public:
 		void setupBtns(BtnManager*);

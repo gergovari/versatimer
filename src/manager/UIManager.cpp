@@ -139,6 +139,7 @@ bool UIManager::ifVisibleChange(unsigned long *a, unsigned long *b, bool blink =
 	return ifVisibleChangeStr(timeToText(a, outA), timeToText(b, outB), blink);
 }
 
+// FIXME: allow multiple blinks (ID system or smt)
 bool UIManager::handleBlink(bool blinkHour, bool blinkMin, bool blinkSec) {
 	bool blink = false;
 	if (blinkHour || blinkMin || blinkSec) {
@@ -198,11 +199,13 @@ void UIManager::printAlarm(unsigned long *target, unsigned long *passed) {
 	}
 }
 
-void UIManager::printMsg(char* msg) {
-	if (ifVisibleChangeStr(msg, lastMsg, false)) {
+void UIManager::printMsg(char* msg, bool blink = false) {
+	if (ifVisibleChangeStr(msg, lastMsg, blink)) {
 		clearLine(1);
 		lcd -> setCursor(0, 1);
-		lcd -> print(msg);
+		if (!handleBlink(true, true, true)) {
+			lcd -> print(msg);
+		}
 	}
 	strncpy(lastMsg, msg, LCD_COLUMNS + 1);
 }
