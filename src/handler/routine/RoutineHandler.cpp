@@ -64,8 +64,44 @@ Routine testRoutine = {
 
 	}
 };
+Routine testRoutine1 = {
+	"Test routine",
+	5,
+	{
+		{
+			"1Test 1", 0, { {"REP", 12}, {"WGT", 6} }
+		}, brk,
+		{
+			"1Test 2", (unsigned long)5 * 1000
+		}, brk,
+		{
+			"1Test 3", 0, { {"REP", 9}, {"WGT", 305} }
+		}
 
-Routine* routine = &testRoutine;
+	}
+};
+Routine testRoutine2 = {
+	"Test routine",
+	5,
+	{
+		{
+			"2Test 1", 0, { {"REP", 12}, {"WGT", 6} }
+		}, brk,
+		{
+			"2Test 2", (unsigned long)5 * 1000
+		}, brk,
+		{
+			"2Test 3", 0, { {"REP", 9}, {"WGT", 305} }
+		}
+
+	}
+};
+
+Routine* routines[3] = {
+	&testRoutine,
+	&testRoutine1,
+	&testRoutine2
+};
 
 bool RoutineHandler::tickSet(UIManager* ui, AlarmManager* alarm, Set* set) {
 	timer.target = set -> duration;
@@ -106,10 +142,25 @@ bool RoutineHandler::tickSet(UIManager* ui, AlarmManager* alarm, Set* set) {
 }
 
 unsigned int i = 0;
-void RoutineHandler::tick(UIManager* ui, AlarmManager* alarm) {
+bool RoutineHandler::tickRoutine(UIManager* ui, AlarmManager* alarm, Routine* routine) {
 	if (i < routine -> setCount) {
 		if (tickSet(ui, alarm, &(routine -> sets[i]))) {
 			i++;
+		}
+		return false;
+	} else {
+		return true;
+	}
+}
+
+Routine* routine;
+void RoutineHandler::tick(UIManager* ui, AlarmManager* alarm) {
+	if (isSelection) {
+		routine = routines[0];
+		isSelection = false;
+	} else {
+		if (tickRoutine(ui, alarm, routine)) {
+			isSelection = true;
 		}
 	}
 }
