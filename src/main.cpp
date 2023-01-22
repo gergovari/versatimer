@@ -9,7 +9,7 @@ BtnManager btn;
 UIManager ui;
 AlarmManager alarm;
 
-HandlerManager handler(&btn);
+HandlerManager handler;
 
 void setup() {
 	Serial.begin(9600);
@@ -18,5 +18,5 @@ void setup() {
 
 void loop() {
 	btn.tick();
-	handler.tick(&ui, &alarm);
+	handler.tick(&btn, &ui, &alarm);
 }

@@ -10,6 +10,29 @@ MULT_STATE Timer::getMultState() {
 	return state;
 }
 
+void Timer::startIdle() {
+	idleStart = millis();
+}
+void Timer::stopIdle() {
+	idleOffset += millis() - idleStart;
+}
+
+bool Timer::tick() {
+	unsigned long currentMillis = millis();
+	if (!setStart) {
+		startMillis = currentMillis;
+		setStart = true;
+	}
+	// NOTE: make sure we don't roll over
+	if (passed > target) {
+		passed = 0;
+	} else {
+		passed = (target + idleOffset) - (currentMillis - startMillis);
+	}
+	return passed == 0;
+}
+
+
 void Timer::advanceMult() {
 	curMult *= 60ul;
 }
@@ -22,26 +45,5 @@ void Timer::addToTarget(signed int sign) {
 	signed long milli = sign * curMult;
 	if ((signed long) target + milli >= 0) {
 		target += milli;
-	}
-}
-
-void Timer::startIdle() {
-	idleStart = millis();
-}
-void Timer::stopIdle() {
-	idleOffset += millis() - idleStart;
-}
-
-void Timer::tick() {
-	unsigned long currentMillis = millis();
-	if (!setStart) {
-		startMillis = currentMillis;
-		setStart = true;
-	}
-	// NOTE: make sure we don't roll over
-	if (passed > target) {
-		passed = 0;
-	} else {
-		passed = (target + idleOffset) - (currentMillis - startMillis);
 	}
 }

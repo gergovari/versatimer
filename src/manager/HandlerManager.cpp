@@ -1,12 +1,13 @@
 #include "HandlerManager.h"
 
-HandlerManager::HandlerManager(BtnManager *btn) : handlers { &timer, &routine } {
-	for (unsigned int i = 0; i < sizeof(handlers)/sizeof(handlers[0]); i++) {
-		handlers[i] -> setupBtns(btn);
+void HandlerManager::handleBtns(BtnManager* btn) {
+	if (lastHandler != handler) {
+		handler -> setupBtns(btn);
+		lastHandler = handler;
 	}
-	handler = handlers[1];
 }
 
-void HandlerManager::tick(UIManager *ui, AlarmManager *alarm) {
+void HandlerManager::tick(BtnManager* btn, UIManager* ui, AlarmManager* alarm) {
+	handleBtns(btn);
 	handler -> tick(ui, alarm);
 }

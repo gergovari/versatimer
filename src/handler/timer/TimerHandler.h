@@ -1,11 +1,11 @@
-#ifndef TIMERHANDLER_H
-#define TIMERHANDLER_H
+#ifndef TimerHandler_H
+#define TimerHandler_H
 
 #include "../Handler.h"
 
-#include "TimerState.h"
-#include "Timer.h"
+#include "../../common/timer/Timer.h"
 
+enum TimerState { SETUP, RUNNING, ALARM, IDLE };
 
 class TimerHandler: public Handler {
 	void tickState(AlarmManager*);

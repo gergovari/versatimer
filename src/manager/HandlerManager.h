@@ -1,5 +1,5 @@
-#ifndef HANDLERMANAGER_H
-#define HANDLERMANAGER_H
+#ifndef HandlerManager_H
+#define HandlerManager_H
 
 #include "../handler/Handler.h"
 #include "../handler/timer/TimerHandler.h"
@@ -10,14 +10,18 @@
 #include "AlarmManager.h"
 
 class HandlerManager {
-	Handler* handlers[2];
 	TimerHandler timer;
 	RoutineHandler routine;
 
-	Handler* handler;
+	Handler* handlers[2] = { &timer, &routine };
+	Handler* handler = handlers[0];
+
+	
+	Handler* lastHandler;
+	void handleBtns(BtnManager*);
+
 	public:
-		explicit HandlerManager(BtnManager*);
-		void tick(UIManager*, AlarmManager*);
+		void tick(BtnManager*, UIManager*, AlarmManager*);
 };
 
 #endif

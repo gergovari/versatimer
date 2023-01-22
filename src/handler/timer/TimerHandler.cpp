@@ -34,9 +34,7 @@ void TimerHandler::tickState(AlarmManager* alarm) {
 			break;	    
 		}
 		case RUNNING: {
-			timer.tick();
-			// NOTE: remember, passed is UNSIGNED, can't be smaller than 0 (we roll over...)
-			if (timer.passed == 0) {
+			if (timer.tick()) {
 				state = ALARM;
 			}
 			break;
