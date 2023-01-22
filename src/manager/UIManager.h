@@ -40,9 +40,12 @@ class UIManager {
 	char* timeToText(unsigned long*, char*, bool, bool, bool);
 	bool handleBlink(bool, bool, bool);
 	void printTime(unsigned long*, bool, bool, bool);
+	void clearLine(unsigned int);
 	public:
 		// NOTE: on avr/arduino(?) beginning stuff like this in a constructor breaks...
 		void begin();
+
+		void clear();
 
 		void printSetup(unsigned long*, bool, bool, bool);
 		void printRunning(unsigned long*, unsigned long*);

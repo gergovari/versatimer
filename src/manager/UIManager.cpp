@@ -151,6 +151,16 @@ bool UIManager::handleBlink(bool blinkHour, bool blinkMin, bool blinkSec) {
 	return blink;
 }
 
+void UIManager::clear() {
+	lcd -> clear();
+}
+void UIManager::clearLine(unsigned int line) {
+	lcd -> setCursor(0, line);
+	for (int i = 0; i < LCD_COLUMNS; i++) {
+		lcd -> print(F(" "));
+	}
+}
+
 void UIManager::printTime(unsigned long *time, bool blinkHour = false, bool blinkMin = false, bool blinkSec = false) {
 	bool blink = handleBlink(blinkHour, blinkMin, blinkSec);
 	char text[LCD_COLUMNS + 1];
@@ -159,7 +169,8 @@ void UIManager::printTime(unsigned long *time, bool blinkHour = false, bool blin
 
 void UIManager::printSetup(unsigned long *target, bool hour, bool min, bool sec) {
 	if (ifVisibleChange(&lastTarget, target, true)) {
-		lcd -> clear();
+		clearLine(0);
+		lcd -> setCursor(0, 0);
 		printTime(target, hour, min, sec);
 		lastTarget = *target;
 	}
@@ -167,7 +178,8 @@ void UIManager::printSetup(unsigned long *target, bool hour, bool min, bool sec)
 
 void UIManager::printRunning(unsigned long *target, unsigned long *passed) {
 	if (ifVisibleChange(&lastPassed, passed) || ifVisibleChange(&lastTarget, target)) {
-		lcd -> clear();
+		clearLine(0);
+		lcd -> setCursor(0, 0);
 		printTime(passed);
 		lcd -> print(F("/"));
 		printTime(target);
@@ -178,7 +190,8 @@ void UIManager::printRunning(unsigned long *target, unsigned long *passed) {
 
 void UIManager::printAlarm(unsigned long *target, unsigned long *passed) {
 	if (ifVisibleChange(passed, passed, true)) {
-		lcd -> clear();
+		clearLine(0);
+		lcd -> setCursor(0, 0);
 		printTime(passed, true, true, true);
 		lcd -> print(F("/"));
 		printTime(target);
@@ -187,7 +200,7 @@ void UIManager::printAlarm(unsigned long *target, unsigned long *passed) {
 
 void UIManager::printMsg(char* msg) {
 	if (ifVisibleChangeStr(msg, lastMsg, false)) {
-		lcd -> clear();
+		clearLine(1);
 		lcd -> setCursor(0, 1);
 		lcd -> print(msg);
 	}

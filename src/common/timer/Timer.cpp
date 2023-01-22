@@ -24,7 +24,7 @@ bool Timer::tick() {
 		setStart = true;
 	}
 	// NOTE: make sure we don't roll over
-	if (passed > target) {
+	if (passed > target || (target + idleOffset) < (currentMillis - startMillis)) {
 		passed = 0;
 	} else {
 		passed = (target + idleOffset) - (currentMillis - startMillis);

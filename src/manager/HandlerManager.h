@@ -14,7 +14,7 @@ class HandlerManager {
 	RoutineHandler routine;
 
 	Handler* handlers[2] = { &timer, &routine };
-	Handler* handler = handlers[0];
+	Handler* handler = handlers[1];
 
 	
 	Handler* lastHandler;
