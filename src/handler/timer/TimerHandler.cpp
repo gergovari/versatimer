@@ -24,12 +24,15 @@ void TimerHandler::setupBtns(BtnManager* btn) {
 
 void TimerHandler::reset() {
 	timer = Timer();
-	alarm = AlarmManager();
 	state = SETUP;
 }
 
-void TimerHandler::tickState() {
+void TimerHandler::tickState(AlarmManager* alarm) {
 	switch (state) {
+		case SETUP: {
+			alarm -> setState(false);
+			break;	    
+		}
 		case RUNNING: {
 			timer.tick();
 			// NOTE: remember, passed is UNSIGNED, can't be smaller than 0 (we roll over...)
@@ -39,7 +42,7 @@ void TimerHandler::tickState() {
 			break;
 		}
 		case ALARM: {
-			alarm.setState(true);
+			alarm -> setState(true);
 			break;
 		}
 		default: {
@@ -69,8 +72,8 @@ void TimerHandler::tickUI(UIManager* ui) {
 	}
 }
 
-void TimerHandler::tick(UIManager* ui) {
-	tickState();
+void TimerHandler::tick(UIManager* ui, AlarmManager* alarm) {
+	tickState(alarm);
 	tickUI(ui);
 }
 

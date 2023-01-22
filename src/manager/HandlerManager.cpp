@@ -7,6 +7,6 @@ HandlerManager::HandlerManager(BtnManager *btn) : handlers { &timer } {
 	handler = handlers[0];
 }
 
-void HandlerManager::tick(UIManager *ui) {
-	handler -> tick(ui);
+void HandlerManager::tick(UIManager *ui, AlarmManager *alarm) {
+	handler -> tick(ui, alarm);
 }

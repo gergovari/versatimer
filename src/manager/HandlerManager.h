@@ -6,6 +6,7 @@
 
 #include "UIManager.h"
 #include "BtnManager.h"
+#include "AlarmManager.h"
 
 class HandlerManager {
 	Handler* handlers[1];
@@ -14,7 +15,7 @@ class HandlerManager {
 	Handler* handler;
 	public:
 		explicit HandlerManager(BtnManager*);
-		void tick(UIManager*);
+		void tick(UIManager*, AlarmManager*);
 };
 
 #endif

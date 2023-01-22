@@ -2,18 +2,13 @@
 #define TIMERHANDLER_H
 
 #include "../Handler.h"
-#include "../../manager/BtnManager.h"
-#include "../../manager/AlarmManager.h"
-#include "../../manager/UIManager.h"
 
 #include "TimerState.h"
 #include "Timer.h"
 
 
 class TimerHandler: public Handler {
-	AlarmManager alarm;
-	
-	void tickState();
+	void tickState(AlarmManager*);
 	void tickUI(UIManager*);
 
 	void toggleState();
@@ -24,7 +19,7 @@ class TimerHandler: public Handler {
 		Timer timer;
 		
 		void setupBtns(BtnManager*);
-		void tick(UIManager*);
+		void tick(UIManager*, AlarmManager*);
 };
 
 #endif
