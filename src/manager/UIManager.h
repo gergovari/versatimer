@@ -20,10 +20,12 @@ class UIManager {
 	// NOTE: arbitrary values, just don't make them 0 so there'll be a trigger to change the UI
 	unsigned long lastTarget = 420;
 	unsigned long lastPassed = 2121;
+	char lastMsg[17];
 
 	unsigned long lastBlink = 0;
 	bool wasBlink = true;
 
+	bool ifVisibleChangeStr(char*, char*, bool);
 	bool ifVisibleChange(unsigned long*, unsigned long*, bool);
 	bool isBlinkNeeded();
 	unsigned long timeToHour(unsigned long*);
@@ -45,6 +47,8 @@ class UIManager {
 		void printSetup(unsigned long*, bool, bool, bool);
 		void printRunning(unsigned long*, unsigned long*);
 		void printAlarm(unsigned long*, unsigned long*);
+
+		void printMsg(char*);
 };
 
 #endif

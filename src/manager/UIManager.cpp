@@ -130,10 +130,13 @@ char* UIManager::timeToText(
 	return out;
 }
 
+bool UIManager::ifVisibleChangeStr(char *a, char *b, bool blink = false) {
+	return strcmp(a, b) || (blink && isBlinkNeeded());
+}
 bool UIManager::ifVisibleChange(unsigned long *a, unsigned long *b, bool blink = false) {
 	char outA[LCD_COLUMNS + 1];
 	char outB[LCD_COLUMNS + 1];
-	return strcmp(timeToText(a, outA), timeToText(b, outB)) || (blink && isBlinkNeeded());
+	return ifVisibleChangeStr(timeToText(a, outA), timeToText(b, outB), blink);
 }
 
 bool UIManager::handleBlink(bool blinkHour, bool blinkMin, bool blinkSec) {
@@ -180,4 +183,13 @@ void UIManager::printAlarm(unsigned long *target, unsigned long *passed) {
 		lcd -> print(F("/"));
 		printTime(target);
 	}
+}
+
+void UIManager::printMsg(char* msg) {
+	if (ifVisibleChangeStr(msg, lastMsg, false)) {
+		lcd -> clear();
+		lcd -> setCursor(0, 1);
+		lcd -> print(msg);
+	}
+	strncpy(lastMsg, msg, LCD_COLUMNS + 1);
 }
