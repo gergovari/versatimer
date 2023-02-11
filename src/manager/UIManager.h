@@ -47,11 +47,11 @@ class UIManager {
 
 		void clear();
 
+		void printMsg(char*, bool);
 		void printSetup(unsigned long*, bool, bool, bool);
 		void printRunning(unsigned long*, unsigned long*);
 		void printAlarm(unsigned long*, unsigned long*);
-
-		void printMsg(char*, bool);
+		void printMenu(const char*[], int, int);
 };
 
 #endif

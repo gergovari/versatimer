@@ -4,6 +4,7 @@
 #include "../manager/BtnManager.h"
 #include "../manager/UIManager.h"
 #include "../manager/AlarmManager.h"
+#include "../manager/MenuManager.h"
 
 class Handler {
 	public:

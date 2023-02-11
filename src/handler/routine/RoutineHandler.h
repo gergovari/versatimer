@@ -36,6 +36,8 @@ class RoutineHandler: public Handler {
 	void toggleState();
 	bool tickSet(UIManager*, AlarmManager*, Set*);
 	bool tickRoutine(UIManager*, AlarmManager*, Routine*);
+	
+	char name[8] = "Routine";
 
 	public:
 		void setupBtns(BtnManager*);

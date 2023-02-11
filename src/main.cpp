@@ -4,10 +4,12 @@
 #include "manager/UIManager.h"
 #include "manager/AlarmManager.h"
 #include "manager/HandlerManager.h"
+#include "manager/MenuManager.h"
 
 BtnManager btn;
 UIManager ui;
 AlarmManager alarm;
+MenuManager menu;
 
 HandlerManager handler;
 
@@ -18,5 +20,5 @@ void setup() {
 
 void loop() {
 	btn.tick();
-	handler.tick(&btn, &ui, &alarm);
+	handler.tick(&btn, &ui, &alarm, &menu);
 }

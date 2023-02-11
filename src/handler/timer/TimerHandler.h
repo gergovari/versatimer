@@ -13,7 +13,7 @@ class TimerHandler: public Handler {
 
 	void toggleState();
 	void reset();
-
+	
 	public:
 		TimerState state;
 		Timer timer;
