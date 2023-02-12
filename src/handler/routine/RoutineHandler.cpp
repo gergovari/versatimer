@@ -64,6 +64,12 @@ bool RoutineHandler::tickSet(UIManager* ui, AlarmManager* alarm, Set* set) {
 			alarm -> setState(false);
 			break;
 		}
+		case SET_IDLE: {
+			ui -> printRunning(&(timer.target), &(timer.passed), hasReturned);
+			ui -> printMsg(set -> name, false);
+			alarm -> setState(false);
+			break;
+		}
 		case SET_DONE: {
 			ui -> printAlarm(&(timer.target), &(timer.passed));
 			ui -> printMsg(set -> name, true);
@@ -110,4 +116,5 @@ void RoutineHandler::tick(UIManager* ui, AlarmManager* alarm) {
 			isSelection = true;
 		}
 	}
+	hasReturned = false;
 }
