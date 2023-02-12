@@ -177,8 +177,8 @@ void UIManager::printSetup(unsigned long *target, bool hour, bool min, bool sec)
 	}
 }
 
-void UIManager::printRunning(unsigned long *target, unsigned long *passed) {
-	if (ifVisibleChange(&lastPassed, passed) || ifVisibleChange(&lastTarget, target)) {
+void UIManager::printRunning(unsigned long *target, unsigned long *passed, bool forceRefresh) {
+	if (ifVisibleChange(&lastPassed, passed) || ifVisibleChange(&lastTarget, target) || forceRefresh) {
 		clearLine(0);
 		lcd -> setCursor(0, 0);
 		printTime(passed);

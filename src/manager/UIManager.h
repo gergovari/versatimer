@@ -49,7 +49,7 @@ class UIManager {
 
 		void printMsg(char*, bool);
 		void printSetup(unsigned long*, bool, bool, bool);
-		void printRunning(unsigned long*, unsigned long*);
+		void printRunning(unsigned long*, unsigned long*, bool forceRefresh = false);
 		void printAlarm(unsigned long*, unsigned long*);
 		void printMenu(const char*[], int, int, bool);
 };

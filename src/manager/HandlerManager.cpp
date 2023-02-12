@@ -31,6 +31,7 @@ void HandlerManager::tick(BtnManager* btn, UIManager* ui, AlarmManager* alarm, M
 		if (item) {
 			ui -> clear();
 			handler = (Handler*)item;
+			handler -> hasReturned = true;
 			inMenu = false;
 		}
 	} else {

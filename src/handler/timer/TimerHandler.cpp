@@ -60,8 +60,8 @@ void TimerHandler::tickUI(UIManager* ui) {
 			ui -> printRunning(&(timer.target), &(timer.passed));
 			break;
 		}
-		case RUNNING: {
-			ui -> printRunning(&(timer.target), &(timer.passed));
+		case IDLE: {
+			ui -> printRunning(&(timer.target), &(timer.passed), hasReturned);
 			break;
 		}
 		case ALARM: {
@@ -74,9 +74,12 @@ void TimerHandler::tickUI(UIManager* ui) {
 	}
 }
 
+#include <Arduino.h>
 void TimerHandler::tick(UIManager* ui, AlarmManager* alarm) {
 	tickState(alarm);
 	tickUI(ui);
+	Serial.println(hasReturned);
+	hasReturned = false;
 }
 
 void TimerHandler::toggleState() {

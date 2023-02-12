@@ -10,6 +10,7 @@ class Handler {
 	public:
 		virtual void setupBtns(BtnManager*) {};
 		virtual void tick(UIManager*, AlarmManager*) {};
+		bool hasReturned = false;
 };
 
 #endif
