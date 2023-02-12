@@ -74,11 +74,9 @@ void TimerHandler::tickUI(UIManager* ui) {
 	}
 }
 
-#include <Arduino.h>
 void TimerHandler::tick(UIManager* ui, AlarmManager* alarm) {
 	tickState(alarm);
 	tickUI(ui);
-	Serial.println(hasReturned);
 	hasReturned = false;
 }
 
