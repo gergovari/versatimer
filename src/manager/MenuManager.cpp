@@ -24,10 +24,10 @@ void MenuManager::moveSelection(signed int direction) {
 }
 
 signed int MenuManager::sanitizeSelection(int count) {
-	if (selection <= 0) {
-		return 0;
-	} else if (selection >= count) {
+	if (selection < 0) {
 		return count - 1;
+	} else if (selection >= count) {
+		return 0;
 	} else {
 		return selection;
 	}
