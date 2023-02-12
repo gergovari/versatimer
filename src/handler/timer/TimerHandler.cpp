@@ -60,6 +60,10 @@ void TimerHandler::tickUI(UIManager* ui) {
 			ui -> printRunning(&(timer.target), &(timer.passed));
 			break;
 		}
+		case RUNNING: {
+			ui -> printRunning(&(timer.target), &(timer.passed));
+			break;
+		}
 		case ALARM: {
 			ui -> printAlarm(&(timer.target), &(timer.passed));
 			break;
