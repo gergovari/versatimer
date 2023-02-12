@@ -45,6 +45,6 @@ void* MenuManager::showSelection(UIManager* ui, MenuItem* items[], int count) {
 	if (isSelected) {
 		return items[sanitizeSelection(count)] -> item;
 	} else {
-		return NULL;
+		return nullptr;
 	}
 }

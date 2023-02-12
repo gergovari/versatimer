@@ -16,8 +16,11 @@ class HandlerManager {
 
 	MenuItem* items[2] = { new MenuItem("Timer", &timer), new MenuItem("Routine", &routine) };
 
-	Handler* handler = NULL;
+	Handler* handler = nullptr;
+	Handler* lastHandler = nullptr;
 	
+	bool isMenuBtn = false;
+	void setupBtns(BtnManager*);
 	void handleBtns(BtnManager*, MenuManager*);
 
 	public:

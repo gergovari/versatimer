@@ -14,14 +14,16 @@ struct MenuItem {
 };
 
 class MenuManager {
-	public:
-		bool isSelected = false;
-		bool isMenuPrinted = false;
-		int selection = 0;
-		int lastCount = 0;
+	bool isSelected = false;
+	int selection = 0;
+	int lastCount = 0;
 
-		void moveSelection(signed int);
-		signed int sanitizeSelection(int);
+	void moveSelection(signed int);
+	signed int sanitizeSelection(int);
+
+	public:
+		bool isMenuPrinted = false;
+
 		void* showSelection(UIManager*, MenuItem*[], int);
 		void setupBtns(BtnManager*);
 };

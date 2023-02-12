@@ -1,11 +1,19 @@
 #include "HandlerManager.h"
 
-bool isMenuBtn = false;
-Handler* lastHandler = NULL;
+void HandlerManager::setupBtns(BtnManager* btn) {
+	btn -> leftBtn.attachLongPressStart(
+		[](void *state){
+			(*((HandlerManager*)state)).handler = nullptr;
+			(*((HandlerManager*)state)).isMenuBtn = false;
+		}, this
+	);
+}
+
 void HandlerManager::handleBtns(BtnManager* btn, MenuManager* menu) {
 	if (lastHandler != handler) {
 		handler -> setupBtns(btn);
 		lastHandler = handler;
+		setupBtns(btn);
 	} else if (!isMenuBtn) {
 		isMenuBtn = true;
 		menu -> setupBtns(btn);
@@ -13,12 +21,13 @@ void HandlerManager::handleBtns(BtnManager* btn, MenuManager* menu) {
 }
 
 void HandlerManager::tick(BtnManager* btn, UIManager* ui, AlarmManager* alarm, MenuManager* menu) {
+	menu -> isMenuPrinted = isMenuBtn;
 	handleBtns(btn, menu);
-	if (handler != NULL) {
+	if (handler) {
 		handler -> tick(ui, alarm);
 	} else {
 		void* item = (menu -> showSelection(ui, items, sizeof(items)/sizeof(items[0])));
-		if (item != NULL) {
+		if (item) {
 			ui -> clear();
 			handler = (Handler*)item;
 		}
