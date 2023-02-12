@@ -19,6 +19,7 @@ void HandlerManager::tick(BtnManager* btn, UIManager* ui, AlarmManager* alarm, M
 	} else {
 		void* item = (menu -> showSelection(ui, items, sizeof(items)/sizeof(items[0])));
 		if (item != NULL) {
+			ui -> clear();
 			handler = (Handler*)item;
 		}
 	}
