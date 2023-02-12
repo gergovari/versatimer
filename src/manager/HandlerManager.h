@@ -20,6 +20,8 @@ class HandlerManager {
 	Handler* lastHandler = nullptr;
 	
 	bool isMenuBtn = false;
+	bool inMenu = true;
+
 	void setupBtns(BtnManager*);
 	void handleBtns(BtnManager*, MenuManager*);
 

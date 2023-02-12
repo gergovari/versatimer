@@ -41,10 +41,9 @@ void* MenuManager::showSelection(UIManager* ui, MenuItem* items[], int count) {
 	}
 	lastCount = count;
 	ui -> printMenu(names, count, selection, !isMenuPrinted);
-	isMenuPrinted = true;
 	if (isSelected) {
-		return items[sanitizeSelection(count)] -> item;
 		isSelected = false;
+		return items[sanitizeSelection(count)] -> item;
 	} else {
 		return nullptr;
 	}
