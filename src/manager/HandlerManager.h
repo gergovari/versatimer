@@ -17,8 +17,7 @@ class HandlerManager {
 	Handler* handlers[2] = { &timer, &routine };
 	Handler* handler = NULL;
 	
-	Handler* lastHandler;
-	void handleBtns(BtnManager*);
+	void handleBtns(BtnManager*, MenuManager*);
 
 	public:
 		void tick(BtnManager*, UIManager*, AlarmManager*, MenuManager*);

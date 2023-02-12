@@ -19,6 +19,7 @@ void setup() {
 }
 
 void loop() {
+	Serial.println(F("test"));
 	btn.tick();
 	handler.tick(&btn, &ui, &alarm, &menu);
 }

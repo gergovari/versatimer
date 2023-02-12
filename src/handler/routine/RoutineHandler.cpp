@@ -47,61 +47,8 @@ void RoutineHandler::setupBtns(BtnManager* btn) {
 }
 
 
-Set brk = { "Break", (unsigned long)2 * 1000 };
-Routine testRoutine = {
-	"Test routine",
-	5,
-	{
-		{
-			"Test 1", 0, { {"REP", 12}, {"WGT", 6} }
-		}, brk,
-		{
-			"Test 2", (unsigned long)5 * 1000
-		}, brk,
-		{
-			"Test 3", 0, { {"REP", 9}, {"WGT", 305} }
-		}
 
-	}
-};
-Routine testRoutine1 = {
-	"Test routine",
-	5,
-	{
-		{
-			"1Test 1", 0, { {"REP", 12}, {"WGT", 6} }
-		}, brk,
-		{
-			"1Test 2", (unsigned long)5 * 1000
-		}, brk,
-		{
-			"1Test 3", 0, { {"REP", 9}, {"WGT", 305} }
-		}
-
-	}
-};
-Routine testRoutine2 = {
-	"Test routine",
-	5,
-	{
-		{
-			"2Test 1", 0, { {"REP", 12}, {"WGT", 6} }
-		}, brk,
-		{
-			"2Test 2", (unsigned long)5 * 1000
-		}, brk,
-		{
-			"2Test 3", 0, { {"REP", 9}, {"WGT", 305} }
-		}
-
-	}
-};
-
-Routine* routines[3] = {
-	&testRoutine,
-	&testRoutine1,
-	&testRoutine2
-};
+Routine* routines[0];
 
 bool RoutineHandler::tickSet(UIManager* ui, AlarmManager* alarm, Set* set) {
 	timer.target = set -> duration;

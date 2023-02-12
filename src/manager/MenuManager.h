@@ -2,6 +2,7 @@
 #define MenuManager_H
 
 #include "UIManager.h"
+#include "BtnManager.h"
 
 struct MenuItem {
 	const char* name;
@@ -14,7 +15,14 @@ struct MenuItem {
 
 class MenuManager {
 	public:
+		bool isSelected = false;
+		int selection = 0;
+		int lastCount = 0;
+
+		void moveSelection(signed int);
+		signed int sanitizeSelection(int);
 		void* showSelection(UIManager*, MenuItem*[], int);
+		void setupBtns(BtnManager*);
 };
 
 #endif
