@@ -51,7 +51,7 @@ class UIManager {
 		void printSetup(unsigned long*, bool, bool, bool);
 		void printRunning(unsigned long*, unsigned long*);
 		void printAlarm(unsigned long*, unsigned long*);
-		void printMenu(const char*[], int, int);
+		void printMenu(const char*[], int, int, bool);
 };
 
 #endif

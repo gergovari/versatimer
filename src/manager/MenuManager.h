@@ -16,6 +16,7 @@ struct MenuItem {
 class MenuManager {
 	public:
 		bool isSelected = false;
+		bool isMenuPrinted = false;
 		int selection = 0;
 		int lastCount = 0;
 

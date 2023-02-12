@@ -210,23 +210,25 @@ void UIManager::printMsg(char* msg, bool blink = false) {
 	strncpy(lastMsg, msg, LCD_COLUMNS + 1);
 }
 
-// FIXME: using LCD_ROWS in a loop creation crashes the arduino... WHY?
-void UIManager::printMenu(const char* names[], int count, int selected) {
-	int relSelected = selected;
-	while (relSelected >= 2) {
-		relSelected -= LCD_ROWS;
-		Serial.println(relSelected);
-	}
-	int start = selected - relSelected;
-	
-	lcd -> clear();
-	for (int i = 0; i < 2; i++) {
-		if (start + i < count) {
-			lcd -> setCursor(0, i);
-			lcd -> print(names[start + i]);
-			if (selected == i) {
-				lcd -> setCursor(15, i);
-				lcd -> print("<");
+#include <Arduino.h>
+int lastSelected = 0;
+void UIManager::printMenu(const char* names[], int count, int selected, bool isNewNames) {
+	if (isNewNames || lastSelected != selected) {
+		lastSelected = selected;
+		int relSelected = selected;
+		while (relSelected >= LCD_ROWS) {
+			relSelected -= LCD_ROWS;
+		}
+		int start = selected - relSelected;
+		lcd -> clear();
+		for (int i = 0; i < LCD_ROWS; i++) {
+			if (start + i < count) {
+				lcd -> setCursor(0, i);
+				lcd -> print(names[start + i]);
+				if (selected == i) {
+					lcd -> setCursor(15, i);
+					lcd -> print("<");
+				}
 			}
 		}
 	}
