@@ -44,6 +44,7 @@ void* MenuManager::showSelection(UIManager* ui, MenuItem* items[], int count) {
 	isMenuPrinted = true;
 	if (isSelected) {
 		return items[sanitizeSelection(count)] -> item;
+		isSelected = false;
 	} else {
 		return nullptr;
 	}
