@@ -1,7 +1,7 @@
 #include "HandlerManager.h"
 
 void HandlerManager::setupBtns(BtnManager* btn) {
-	btn -> leftBtn.attachLongPressStart(
+	btn -> okBtn.attachLongPressStart(
 		[](void *state){
 			// NOTE: simply setting handler/lastHandler to nullptr crashes the arduino or just plain doesnt work...
 			(*((HandlerManager*)state)).inMenu = true;
