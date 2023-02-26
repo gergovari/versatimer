@@ -4,7 +4,7 @@
 #include "../Handler.h"
 
 #include "../../common/timer/Timer.h"
-//#include "../../manager/RoutineManager.h"
+#include "../../manager/RoutineManager.h"
 
 enum RoutineState {
 	SET_RUNNING,
@@ -20,14 +20,14 @@ class RoutineHandler: public Handler {
 	bool isSelection = true;
 
 	void toggleState();
-	bool tickSet(UIManager*, AlarmManager*, Set*);
+	//bool tickSet(UIManager*, AlarmManager*, Set*);
 	bool tickRoutine(UIManager*, AlarmManager*, Routine*);
 	
 	char name[8] = "Routine";
 
 	public:
 		void setupBtns(BtnManager*);
-		void tick(UIManager*, AlarmManager*);
+		void tick(UIManager*, AlarmManager*, RoutineManager*);
 };
 
 #endif

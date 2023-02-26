@@ -46,11 +46,7 @@ void RoutineHandler::setupBtns(BtnManager* btn) {
 	);
 }
 
-
-
-Routine* routines[0];
-
-bool RoutineHandler::tickSet(UIManager* ui, AlarmManager* alarm, Set* set) {
+/*bool RoutineHandler::tickSet(UIManager* ui, AlarmManager* alarm, Set* set) {
 	timer.target = set -> duration;
 	switch (state) {
 		case SET_RUNNING: {
@@ -92,14 +88,15 @@ bool RoutineHandler::tickSet(UIManager* ui, AlarmManager* alarm, Set* set) {
 		}
 	}
 	return false;
-}
+}*/
 
 unsigned int i = 0;
 bool RoutineHandler::tickRoutine(UIManager* ui, AlarmManager* alarm, Routine* routine) {
 	if (i < routine -> setCount) {
-		if (tickSet(ui, alarm, &(routine -> sets[i]))) {
+		/*if (tickSet(ui, alarm, &(routine -> sets[i]))) {
 			i++;
-		}
+		}*/
+		i++;
 		return false;
 	} else {
 		return true;
@@ -107,9 +104,8 @@ bool RoutineHandler::tickRoutine(UIManager* ui, AlarmManager* alarm, Routine* ro
 }
 
 Routine* routine;
-void RoutineHandler::tick(UIManager* ui, AlarmManager* alarm) {
+void RoutineHandler::tick(UIManager* ui, AlarmManager* alarm, RoutineManager* routineManager) {
 	if (isSelection) {
-		routine = routines[0];
 		isSelection = false;
 	} else {
 		if (tickRoutine(ui, alarm, routine)) {

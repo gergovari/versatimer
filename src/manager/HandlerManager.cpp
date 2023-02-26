@@ -26,8 +26,11 @@ MenuItem* HandlerManager::getItem(int pos) {
 	return items[pos];
 }
 
-void HandlerManager::tick(BtnManager* btn, UIManager* ui, AlarmManager* alarm, MenuManager* menu) {
+void HandlerManager::begin(MenuManager* menu) {
 	menu -> provider = this;
+}
+
+void HandlerManager::tick(BtnManager* btn, UIManager* ui, AlarmManager* alarm, MenuManager* menu, RoutineManager* routine) {
 	menu -> isMenuPrinted = isMenuBtn;
 	handleBtns(btn, menu);
 	if (inMenu) {
@@ -41,7 +44,7 @@ void HandlerManager::tick(BtnManager* btn, UIManager* ui, AlarmManager* alarm, M
 		}
 	} else {
 		if (handler) {
-			handler -> tick(ui, alarm);
+			handler -> tick(ui, alarm, routine);
 		}
 	}
 }

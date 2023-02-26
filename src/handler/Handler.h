@@ -5,11 +5,12 @@
 #include "../manager/UIManager.h"
 #include "../manager/AlarmManager.h"
 #include "../manager/MenuManager.h"
+#include "../manager/RoutineManager.h"
 
 class Handler {
 	public:
 		virtual void setupBtns(BtnManager*) {};
-		virtual void tick(UIManager*, AlarmManager*) {};
+		virtual void tick(UIManager*, AlarmManager*, RoutineManager*) {};
 		bool hasReturned = false;
 };
 

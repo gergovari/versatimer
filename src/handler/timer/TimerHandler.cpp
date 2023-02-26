@@ -74,7 +74,7 @@ void TimerHandler::tickUI(UIManager* ui) {
 	}
 }
 
-void TimerHandler::tick(UIManager* ui, AlarmManager* alarm) {
+void TimerHandler::tick(UIManager* ui, AlarmManager* alarm, RoutineManager* _) {
 	tickState(alarm);
 	tickUI(ui);
 	hasReturned = false;

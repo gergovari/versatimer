@@ -3,18 +3,19 @@
 
 #include "../handler/Handler.h"
 #include "../handler/timer/TimerHandler.h"
-//#include "../handler/routine/RoutineHandler.h"
+#include "../handler/routine/RoutineHandler.h"
 
 #include "UIManager.h"
 #include "BtnManager.h"
 #include "AlarmManager.h"
 #include "MenuManager.h"
+#include "RoutineManager.h"
 
 class HandlerManager: public MenuItemProvider {
 	TimerHandler timer;
-	//RoutineHandler routine;
+	RoutineHandler routineHandler;
 
-	MenuItem* items[2] = { new MenuItem("Timer", &timer), new MenuItem("Routine", &timer) };
+	MenuItem* items[2] = { new MenuItem("Timer", &timer), new MenuItem("Routine", &routineHandler) };
 
 	Handler* handler = nullptr;
 	Handler* lastHandler = nullptr;
@@ -27,7 +28,8 @@ class HandlerManager: public MenuItemProvider {
 
 	public:
 		MenuItem* getItem(int);
-		void tick(BtnManager*, UIManager*, AlarmManager*, MenuManager*);
+		void begin(MenuManager*);
+		void tick(BtnManager*, UIManager*, AlarmManager*, MenuManager*, RoutineManager*);
 };
 
 #endif

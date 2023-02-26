@@ -19,7 +19,7 @@ class TimerHandler: public Handler {
 		Timer timer;
 		
 		void setupBtns(BtnManager*);
-		void tick(UIManager*, AlarmManager*);
+		void tick(UIManager*, AlarmManager*, RoutineManager*);
 };
 
 #endif
