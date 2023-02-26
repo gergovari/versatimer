@@ -22,12 +22,17 @@ void HandlerManager::handleBtns(BtnManager* btn, MenuManager* menu) {
 	}
 }
 
+MenuItem* HandlerManager::getItem(int pos) {
+	return items[pos];
+}
+
 void HandlerManager::tick(BtnManager* btn, UIManager* ui, AlarmManager* alarm, MenuManager* menu) {
+	menu -> provider = this;
 	menu -> isMenuPrinted = isMenuBtn;
 	handleBtns(btn, menu);
 	if (inMenu) {
 		alarm -> setState(false);
-		void* item = (menu -> showSelection(ui, items, sizeof(items)/sizeof(items[0])));
+		void* item = menu -> showSelection(ui);
 		if (item) {
 			ui -> clear();
 			handler = (Handler*)item;

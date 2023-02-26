@@ -210,25 +210,17 @@ void UIManager::printMsg(char* msg, bool blink = false) {
 	strncpy(lastMsg, msg, LCD_COLUMNS + 1);
 }
 
-#include <Arduino.h>
 int lastSelected = 0;
-void UIManager::printMenu(const char* names[], int count, int selected, bool isNewNames) {
+void UIManager::printMenu(const char* names[], int selected, bool isNewNames) {
 	if (isNewNames || lastSelected != selected) {
 		lastSelected = selected;
-		int relSelected = selected;
-		while (relSelected >= LCD_ROWS) {
-			relSelected -= LCD_ROWS;
-		}
-		int start = selected - relSelected;
 		lcd -> clear();
 		for (int i = 0; i < LCD_ROWS; i++) {
-			if (start + i < count) {
-				lcd -> setCursor(0, i);
-				lcd -> print(names[start + i]);
-				if (selected == i) {
-					lcd -> setCursor(15, i);
-					lcd -> print("<");
-				}
+			lcd -> setCursor(0, i);
+			lcd -> print(names[i]);
+			if (selected == i) {
+				lcd -> setCursor(15, i);
+				lcd -> print("<");
 			}
 		}
 	}

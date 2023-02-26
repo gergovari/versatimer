@@ -4,6 +4,8 @@
 #include "UIManager.h"
 #include "BtnManager.h"
 
+#define LCD_ROWS 2
+
 struct MenuItem {
 	const char* name;
 	void* item;
@@ -13,18 +15,25 @@ struct MenuItem {
 	};
 };
 
+class MenuItemProvider {
+	public:
+		virtual MenuItem* getItem(int);
+};
+
 class MenuManager {
 	bool isSelected = false;
 	int selection = 0;
-	int lastCount = 0;
+	MenuItem* items[LCD_ROWS];	
 
 	void moveSelection(signed int);
-	signed int sanitizeSelection(int);
-
+	signed int sanitizeSelection();
+	
 	public:
+		MenuItemProvider* provider;
 		bool isMenuPrinted = false;
-
-		void* showSelection(UIManager*, MenuItem*[], int);
+		
+		void getNeededItems();
+		void* showSelection(UIManager*);
 		void setupBtns(BtnManager*);
 };
 

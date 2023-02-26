@@ -4,27 +4,13 @@
 #include "../Handler.h"
 
 #include "../../common/timer/Timer.h"
+//#include "../../manager/RoutineManager.h"
 
 enum RoutineState {
 	SET_RUNNING,
 	SET_IDLE,
 	SET_DONE,
 	SET_RECORD
-};
-
-struct Record {
-	char name[4];
-	int value;
-};
-struct Set {
-	char name[17];
-	unsigned long duration;
-	Record records[];
-};
-struct Routine {
-	char name[16];
-	unsigned int setCount;
-	Set sets[];
 };
 
 class RoutineHandler: public Handler {

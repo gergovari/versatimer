@@ -20,30 +20,42 @@ void MenuManager::setupBtns(BtnManager* btn) {
 
 void MenuManager::moveSelection(signed int direction) {
 	selection += direction;
-	selection = sanitizeSelection(lastCount);
+	selection = sanitizeSelection();
+	getNeededItems();
 }
 
-signed int MenuManager::sanitizeSelection(int count) {
+void MenuManager::getNeededItems() {
+	int relSelection = selection;
+	while (relSelection >= LCD_ROWS) {
+		relSelection -= LCD_ROWS;
+	}
+	int start = selection - relSelection;
+	for (int i = 0; i < LCD_ROWS; i++) {
+		items[i] = provider -> getItem(start + i);
+	}
+}
+
+signed int MenuManager::sanitizeSelection() {
 	if (selection < 0) {
-		return count - 1;
-	} else if (selection >= count) {
+		//return count - 1;
 		return 0;
+	/*} else if (selection >= count) {
+		return 0;*/
 	} else {
 		return selection;
 	}
-	return 0;
 }
 
-void* MenuManager::showSelection(UIManager* ui, MenuItem* items[], int count) {
-	const char* names[count];
-	for (int i = 0; i < count; i++) {
+void* MenuManager::showSelection(UIManager* ui) {
+	getNeededItems();
+	const char* names[LCD_ROWS];
+	for (int i = 0; i < LCD_ROWS; i++) {
 		names[i] = items[i] -> name;
 	}
-	lastCount = count;
-	ui -> printMenu(names, count, selection, !isMenuPrinted);
+	ui -> printMenu(names, selection, !isMenuPrinted);
 	if (isSelected) {
 		isSelected = false;
-		return items[sanitizeSelection(count)] -> item;
+		return items[sanitizeSelection()] -> item;
 	} else {
 		return nullptr;
 	}
